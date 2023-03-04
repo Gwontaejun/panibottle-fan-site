@@ -1,0 +1,8 @@
+{
+    "editor.formatOnSave": true,
+  // 최신버전
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+}
