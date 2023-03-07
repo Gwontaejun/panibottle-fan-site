@@ -1,0 +1,139 @@
+.main-wrapper {
+	width: 100%;
+	height: 100%;
+	&.dim {
+		&:before {
+			content: '';
+			position: fixed;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			animation: dim-ani 0.5s;
+			animation-fill-mode: forwards;
+			z-index: 99;
+		}
+	}
+}
+
+.bottom-cloudy {
+	&:after,
+	&:before {
+		content: '';
+		position: fixed;
+		left: 0;
+		right: 0;
+		bottom: -20%;
+		margin: auto;
+		width: auto;
+		height: 40%;
+		background: url('../images/cloudy.png');
+		animation: cloudy-animation 10s linear infinite alternate;
+		z-index: 3;
+	}
+	&:after {
+		animation: cloudy-animation 5s linear infinite alternate;
+	}
+}
+
+@keyframes cloudy-animation {
+	from {
+		left: -25%;
+	}
+	to {
+		left: 0%;
+	}
+}
+
+.main-content {
+	width: 100%;
+	height: 100%;
+	background-color: #ff6600;
+}
+
+.btn-start {
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	margin: auto;
+	border: none;
+	background: url('../images/airplane.png') no-repeat;
+	width: 128px;
+	height: 128px;
+	border-radius: 50%;
+	cursor: pointer;
+	z-index: 2;
+	&.click {
+		animation: airplane-animation 5s;
+		animation-fill-mode: forwards;
+	}
+}
+
+.btn-start-effect {
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	width: 128px;
+	height: 128px;
+	margin: auto;
+	z-index: 1;
+	&:before,
+	&:after {
+		content: '';
+		cursor: default;
+		user-select: none;
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		margin: auto;
+		background: white;
+		border-radius: 50%;
+		animation: wave 2s infinite linear;
+		z-index: 1;
+	}
+	&:after {
+		opacity: 0;
+		animation: wave 2s 1s infinite linear;
+	}
+}
+
+// dim 추가 모션
+@keyframes dim-ani {
+	100% {
+		background-color: black;
+		transition: background-color ease-out;
+	}
+}
+
+// 시작버튼 뒤 파동모션
+@keyframes wave {
+	0% {
+		transform: scale(0);
+		opacity: 0.7;
+	}
+	100% {
+		transform: scale(2.5);
+		opacity: 0;
+	}
+}
+
+// 비행기 이동모션
+@keyframes airplane-animation {
+	0% {
+		transform: translate(0, 0);
+	}
+	30% {
+		transform: translate(-40vh, 0) scale(1);
+	}
+	100% {
+		transform: translate(80vh, 80vh) scale(3.5);
+		animation-timing-function: cubic-bezier(1, 0, 0.8, 1);
+		display: none;
+	}
+}
