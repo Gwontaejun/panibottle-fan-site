@@ -23,11 +23,12 @@
 		position: fixed;
 		left: 0;
 		right: 0;
-		bottom: -20%;
+		bottom: -20vh;
 		margin: auto;
 		width: auto;
-		height: 40%;
+		height: 40vh;
 		background: url('../images/cloudy.png');
+		background-size: 80vh;
 		animation: cloudy-animation 10s linear infinite alternate;
 		z-index: 3;
 	}
@@ -60,8 +61,10 @@
 	margin: auto;
 	border: none;
 	background: url('../images/airplane.png') no-repeat;
-	width: 128px;
-	height: 128px;
+	background-size: 13vh;
+	background-position: center;
+	width: 13vh;
+	height: 13vh;
 	border-radius: 50%;
 	cursor: pointer;
 	z-index: 2;
@@ -77,8 +80,8 @@
 	bottom: 0;
 	left: 0;
 	right: 0;
-	width: 128px;
-	height: 128px;
+	width: 13vh;
+	height: 13vh;
 	margin: auto;
 	z-index: 1;
 	&:before,
