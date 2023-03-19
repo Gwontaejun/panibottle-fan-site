@@ -26,7 +26,6 @@ const MainPage = () => {
 				<div className="btn-start-effect" />
 			</div>
 			<div className="bottom-cloudy" />
-			<div className="airport-stamp" />
 		</div>
 	);
 };

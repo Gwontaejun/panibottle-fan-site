@@ -111,6 +111,18 @@
 		]
 	},
 	{
+		"featureType": "road.highway",
+		"elementType": "all",
+		"stylers": [
+			{
+				"color": "#c9c9c9"
+			},
+			{
+				"weight": "0.01"
+			}
+		]
+	},
+	{
 		"featureType": "transit",
 		"elementType": "all",
 		"stylers": [

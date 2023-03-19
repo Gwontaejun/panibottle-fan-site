@@ -9,17 +9,14 @@ const MapPage = () => {
 
 	return (
 		<div className="map-wrapper">
-			<div ref={dimRef} className="map-dim">
-				<div className="stamp stamp1" />
-				<div className="stamp stamp2" />
-				<div className="stamp stamp3" />
-			</div>
+			<div ref={dimRef} className="map-dim" />
 
 			<div className="map-content">
 				<GoogleMapReact
 					bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_MAP_API_KEY }}
 					options={{
 						styles: MapStylesheet,
+						fullscreenControl: false,
 					}}
 					defaultCenter={{ lat: 37.6009055, lng: 126.9485623 }}
 					defaultZoom={1}

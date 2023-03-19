@@ -30,6 +30,7 @@
 				"namedComponents": ["arrow-function", "function-declaration"]
 			}
 		],
-		"import/no-extraneous-dependencies": 0
+		"import/no-extraneous-dependencies": 0,
+		"global-require": 0
 	}
 }
