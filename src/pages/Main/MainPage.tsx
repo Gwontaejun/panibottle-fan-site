@@ -36,11 +36,40 @@ const MainPage = () => {
 	const mainRef = useRef<HTMLDivElement>(null);
 	const isDarkMode = useRecoilValue(darkModeState);
 
+	const onClickStart = () => {
+		startRef.current?.classList.add('click');
+		document.querySelector('.btn-start-effect')?.remove();
+
+		setTimeout(() => {
+			mainRef.current?.classList.add('dim');
+			setTimeout(() => {
+				navigate('/map');
+			}, 1000);
+		}, 3000);
+	};
+
+	return (
+		<MainWrapper ref={mainRef}>
+			<MainContent>
+				{/* 다크모드 시 움직이는 별 */}
+				{isDarkMode && <MoveStars />}
+				<button ref={startRef} type="button" className="btn-start" aria-label="시작하기 버튼" onClick={onClickStart} />
+				<div className="btn-start-effect" />
+			</MainContent>
+			<div className="bottom-cloudy" />
+		</MainWrapper>
+	);
+};
+
+const MoveStars = () => {
 	useEffect(() => {
-		if (isDarkMode) {
-			renderStar();
-		}
-	}, [isDarkMode]);
+		renderStar();
+		window.addEventListener('resize', renderStar);
+
+		return () => {
+			window.removeEventListener('resize', renderStar);
+		};
+	}, []);
 
 	const renderStar = () => {
 		const stars = document.querySelector('.stars');
@@ -63,8 +92,7 @@ const MainPage = () => {
 				() => `<circle class='star'
 			  cx=${getRandomX()}
 			  cy=${getRandomY()}
-			  r=${randomRadius()}
-			  className="star" />`
+			  r=${randomRadius()} />`
 			)
 			.join('');
 
@@ -73,28 +101,7 @@ const MainPage = () => {
 		}
 	};
 
-	const onClickStart = () => {
-		startRef.current?.classList.add('click');
-		document.querySelector('.btn-start-effect')?.remove();
-
-		setTimeout(() => {
-			mainRef.current?.classList.add('dim');
-			setTimeout(() => {
-				navigate('/map');
-			}, 1000);
-		}, 3000);
-	};
-
-	return (
-		<MainWrapper ref={mainRef}>
-			<MainContent>
-				{isDarkMode && <svg className="stars" />}
-				<button ref={startRef} type="button" className="btn-start" aria-label="시작하기 버튼" onClick={onClickStart} />
-				<div className="btn-start-effect" />
-			</MainContent>
-			<div className="bottom-cloudy" />
-		</MainWrapper>
-	);
+	return <svg className="stars" />;
 };
 
 export default MainPage;
