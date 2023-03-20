@@ -1,11 +1,13 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef } from 'react';
+import { useRecoilValue } from 'recoil';
 import GoogleMapReact from 'google-map-react';
-import MapStylesheet from './MapStylesheet.json';
+import { darkModeState } from 'store/commonStore';
+import { lightMode, darkMode } from './MapStyles';
 import 'assets/styles/MapPage.scss';
 
 const MapPage = () => {
+	const isDarkMode = useRecoilValue(darkModeState);
 	const dimRef = useRef<HTMLDivElement>(null);
-	useEffect(() => {}, []);
 
 	return (
 		<div className="map-wrapper">
@@ -15,7 +17,7 @@ const MapPage = () => {
 				<GoogleMapReact
 					bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_MAP_API_KEY }}
 					options={{
-						styles: MapStylesheet,
+						styles: isDarkMode ? darkMode : lightMode,
 						fullscreenControl: false,
 					}}
 					defaultCenter={{ lat: 37.6009055, lng: 126.9485623 }}
