@@ -1,0 +1,100 @@
+import React, { useMemo } from 'react';
+import GoogleMapReact from 'google-map-react-concurrent';
+import { lightMode, darkMode } from './MapStyles';
+import _ from 'lodash';
+
+import 'assets/styles/Map.scss';
+
+interface Bounds {
+	lat: number;
+	lng: number;
+}
+
+export interface BoundRange {
+	min_longitude: number;
+	min_latitude: number;
+	max_longitude: number;
+	max_latitude: number;
+}
+
+interface MapProps {
+	isDarkMode: boolean;
+	defaultBounds: Bounds;
+	markers: MarkerProps[];
+	onBoundChange: (data: BoundRange) => void;
+}
+
+export interface MarkerProps extends Bounds {
+	text: string;
+	region: string;
+}
+
+const Map = (props: MapProps) => {
+	const { isDarkMode, defaultBounds, markers, onBoundChange } = props;
+
+	const onMapApis = (map, maps) => {
+		const mark = new maps.Marker({
+			map,
+			position: { lat: 45.6009055, lng: 126.9485623 },
+			title: 'dasdsa',
+		});
+
+		map.addListener('dragend', () => {
+			const bounds = {
+				min_longitude: map.getBounds().getSouthWest().lng(),
+				min_latitude: map.getBounds().getSouthWest().lat(),
+				max_longitude: map.getBounds().getNorthEast().lng(),
+				max_latitude: map.getBounds().getNorthEast().lat(),
+			};
+
+			onBoundChange(bounds);
+		});
+
+		return mark;
+	};
+
+	const renderMarker = useMemo(
+		() =>
+			markers.map((item, index) => (
+				// GoogleMapReact에서 지원하는 children에 lat, lng값이 필요.
+				// 마커 컴포넌트 내부에선 lat, lng값을 사용하지 않기때문에 ignore처리
+				// eslint-disable-next-line react/jsx-props-no-spreading
+				<Marker {...item} key={`marker-${index}`} />
+			)),
+		[markers]
+	);
+
+	return (
+		<GoogleMapReact
+			bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_MAP_API_KEY }}
+			options={{
+				styles: isDarkMode ? darkMode : lightMode,
+				fullscreenControl: false,
+			}}
+			defaultCenter={defaultBounds}
+			defaultZoom={1}
+			onGoogleApiLoaded={({ map, maps }) => onMapApis(map, maps)}
+			yesIWantToUseGoogleMapApiInternals
+		>
+			{renderMarker}
+		</GoogleMapReact>
+	);
+};
+
+const Marker = React.memo(
+	(props: MarkerProps) => (
+		<div className="marker-wrapper">
+			<div className={`marker region-${props?.region}`} aria-label={`${props?.lat}, ${props?.lng}`}>
+				{props?.text}
+			</div>
+		</div>
+	),
+	(prevProps, nextProps) => {
+		const prev = _.pick(prevProps, ['lat', 'lng']);
+		const next = _.pick(nextProps, ['lat', 'lng']);
+
+		return _.isEqual(prev, next);
+	}
+);
+
+export default Map;
