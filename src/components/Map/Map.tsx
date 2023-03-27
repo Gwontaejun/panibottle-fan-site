@@ -32,13 +32,7 @@ export interface MarkerProps extends Bounds {
 const Map = (props: MapProps) => {
 	const { isDarkMode, defaultBounds, markers, onBoundChange } = props;
 
-	const onMapApis = (map, maps) => {
-		const mark = new maps.Marker({
-			map,
-			position: { lat: 45.6009055, lng: 126.9485623 },
-			title: 'dasdsa',
-		});
-
+	const onMapApis = (map) => {
 		map.addListener('dragend', () => {
 			const bounds = {
 				min_longitude: map.getBounds().getSouthWest().lng(),
@@ -49,8 +43,6 @@ const Map = (props: MapProps) => {
 
 			onBoundChange(bounds);
 		});
-
-		return mark;
 	};
 
 	const renderMarker = useMemo(
@@ -66,14 +58,14 @@ const Map = (props: MapProps) => {
 
 	return (
 		<GoogleMapReact
-			bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_MAP_API_KEY }}
+			bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_API_KEY }}
 			options={{
 				styles: isDarkMode ? darkMode : lightMode,
 				fullscreenControl: false,
 			}}
 			defaultCenter={defaultBounds}
 			defaultZoom={1}
-			onGoogleApiLoaded={({ map, maps }) => onMapApis(map, maps)}
+			onGoogleApiLoaded={({ map }) => onMapApis(map)}
 			yesIWantToUseGoogleMapApiInternals
 		>
 			{renderMarker}
@@ -85,7 +77,8 @@ const Marker = React.memo(
 	(props: MarkerProps) => (
 		<div className="marker-wrapper">
 			<div className={`marker region-${props?.region}`} aria-label={`${props?.lat}, ${props?.lng}`}>
-				{props?.text}
+				{/* <div>{props?.text}</div> */}
+				<img src={require('assets/images/south-korea.png')} alt={props?.text} />
 			</div>
 		</div>
 	),
