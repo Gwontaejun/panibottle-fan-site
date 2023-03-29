@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import GoogleMapReact from 'google-map-react-concurrent';
 import { lightMode, darkMode } from './MapStyles';
 import _ from 'lodash';
@@ -14,27 +14,28 @@ interface MapProps {
 	isDarkMode: boolean;
 	defaultBounds: Bounds;
 	markers: MarkerProps[];
+	onClickMarker: (data: MarkerProps) => void;
 }
 
 export interface MarkerProps extends Bounds {
-	text: string;
+	country_code: string;
+	country_name: string;
 	icon_url: string;
 	region: string;
+	description: string;
+	onClickMarker?: (data: MarkerProps) => void;
 }
 
 const Map = (props: MapProps) => {
-	const { isDarkMode, defaultBounds, markers } = props;
+	const { isDarkMode, defaultBounds, markers, onClickMarker } = props;
 
-	const renderMarker = useMemo(
-		() =>
-			markers.map((item, index) => (
-				// GoogleMapReact에서 지원하는 children에 lat, lng값이 필요.
-				// 마커 컴포넌트 내부에선 lat, lng값을 사용하지 않기때문에 ignore처리
-				// eslint-disable-next-line react/jsx-props-no-spreading
-				<Marker {...item} key={`marker-${index}`} />
-			)),
-		[markers]
-	);
+	const renderMarker = () =>
+		markers.map((item, index) => (
+			// GoogleMapReact에서 지원하는 children에 lat, lng값이 필요.
+			// 마커 컴포넌트 내부에선 lat, lng값을 사용하지 않기때문에 ignore처리
+			// eslint-disable-next-line react/jsx-props-no-spreading
+			<Marker {...item} key={`marker-${index}`} onClickMarker={onClickMarker} />
+		));
 
 	return (
 		<GoogleMapReact
@@ -48,20 +49,27 @@ const Map = (props: MapProps) => {
 			// onGoogleApiLoaded={({ map }) => onMapApis(map)}
 			yesIWantToUseGoogleMapApiInternals
 		>
-			{renderMarker}
+			{renderMarker()}
 		</GoogleMapReact>
 	);
 };
 
 const Marker = React.memo(
-	(props: MarkerProps) => (
-		<div className="marker-wrapper">
-			<div className={`marker region-${props?.region}`} aria-label={`${props?.lat}, ${props?.lng}`}>
-				{/* <div>{props?.text}</div> */}
-				<img src={props?.icon_url} alt={props?.text} />
-			</div>
-		</div>
-	),
+	(props: MarkerProps) => {
+		const { country_name: name, region, lat, lng, icon_url: icon } = props;
+		const onMarkerClick = () => {
+			props.onClickMarker?.(props);
+		};
+
+		return (
+			<button type="button" className="marker-wrapper" onClick={onMarkerClick}>
+				<div className={`marker region-${region}`} aria-label={`${lat}, ${lng}`}>
+					{/* <div>{props?.text}</div> */}
+					<img src={icon} alt={name} />
+				</div>
+			</button>
+		);
+	},
 	(prevProps, nextProps) => {
 		const prev = _.pick(prevProps, ['lat', 'lng']);
 		const next = _.pick(nextProps, ['lat', 'lng']);

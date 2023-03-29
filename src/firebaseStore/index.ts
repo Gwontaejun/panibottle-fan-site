@@ -15,5 +15,6 @@ initializeApp(firebaseConfig);
 const firestore = getFirestore();
 
 export const countryCollection = collection(firestore, 'country');
+export const videoCollection = collection(firestore, 'country_video');
 
 export default firestore;

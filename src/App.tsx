@@ -1,11 +1,11 @@
 import React from 'react';
-import { RecoilRoot, useRecoilValue } from 'recoil';
-import { ThemeProvider } from 'styled-components';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Header from 'components/Header/Header';
+import { RecoilRoot, useRecoilValue } from 'recoil';
+import { darkModeState } from 'store/commonStore';
+import { ThemeProvider } from 'styled-components';
+import { Header } from 'components';
 import MainPage from 'pages/Main/MainPage';
 import MapPage from 'pages/Map/MapPage';
-import { darkModeState } from 'store/commonStore';
 import { lightTheme, darkTheme } from 'theme/theme';
 
 const ThemePage = () => {
