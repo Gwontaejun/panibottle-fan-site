@@ -11,7 +11,7 @@ export const countryInfo = atom({
 	dangerouslyAllowMutability: true,
 });
 
-export const countryVideo = atom({
+export const countryVideo = atom<string[]>({
 	key: 'countryVideo',
 	default: [],
 });

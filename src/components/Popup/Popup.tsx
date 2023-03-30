@@ -18,7 +18,6 @@ interface PopupTypes {
 const Popup = (props: PopupTypes) => {
 	const { popupHooks, className } = props;
 
-	console.log('popupHooks.isShowing', popupHooks.isShowing);
 	return (
 		<FocusTrap active={popupHooks.isShowing}>
 			<div className={`popup-wrapper ${className} ${popupHooks.isShowing ? 'show' : ''}`}>{props?.children}</div>

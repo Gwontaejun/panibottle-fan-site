@@ -3,7 +3,7 @@ import { getDocs, query, where } from 'firebase/firestore';
 import { countryCollection, videoCollection } from 'firebaseStore';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { darkModeState } from 'store/commonStore';
-import { countryInfo } from 'store/mapStore';
+import { countryInfo, countryVideo } from 'store/mapStore';
 import { Map } from 'components';
 import { usePopup } from 'hooks';
 import CountryPopup from './CountryPopup';
@@ -17,6 +17,7 @@ const MapPage = () => {
 	const dimRef = useRef<HTMLDivElement>(null);
 	const isDarkMode = useRecoilValue(darkModeState);
 	const setCountryInfo = useSetRecoilState(countryInfo);
+	const setCountryVideos = useSetRecoilState(countryVideo);
 	const [markers, setMarkers] = useState<MarkerProps[]>([]);
 
 	useEffect(() => {
@@ -46,10 +47,10 @@ const MapPage = () => {
 	};
 
 	const onClickMarker = async (data: MarkerProps): Promise<void> => {
-		setCountryInfo(data);
 		const docData = await getDocs(query(videoCollection, where('country_code', '==', data.country_code)));
-
-		docData.forEach((item) => console.log(item.data()));
+		const videoIds = docData.docs.map((item) => item.data().video_id);
+		setCountryInfo(data);
+		setCountryVideos(videoIds);
 		countryPopup.toggle();
 	};
 
