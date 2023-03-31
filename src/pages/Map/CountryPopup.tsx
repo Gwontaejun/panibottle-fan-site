@@ -5,6 +5,7 @@ import { countryInfo, countryVideo } from 'store/mapStore';
 import { Popup } from 'components';
 import { PopupHooks } from 'components/Popup/Popup';
 import Carousel from 'components/Carousel/Carousel';
+import Youtube from 'react-youtube';
 
 interface CountType {
 	viewCount: number;
@@ -57,26 +58,28 @@ const CountryPopup = ({ popupHooks }: { popupHooks: PopupHooks }) => {
 				<div className="country-header">
 					<h1>{info.country_name}(Republic of Korea)</h1>
 					<span>Asia</span>
-					<span>총 조회 수 : {count?.viewCount.toString()} / </span>
-					<span>총 좋아요 수 : {count?.likeCount.toString()}</span>
 				</div>
 				<div className="country-content">
-					{/* {videos.length && (
-						<Youtube
-							className="youtube-video"
-							videoId={videos?.[0]}
-							opts={{
-								width: '100%',
-								height: '100%',
-								playerVars: {
-									autoplay: 0, // 자동재생 O
-									rel: 0, // 관련 동영상 표시하지 않음
-									modestbranding: 1, // 컨트롤 바에 youtube 로고를 표시하지 않음
-								},
-							}}
-						/>
-					)} */}
-					<Carousel />
+					<Carousel>
+						{videos.map((item) => (
+							<Youtube
+								videoId={item}
+								opts={{
+									width: '100%',
+									height: '100%',
+									playerVars: {
+										autoplay: 0, // 자동재생 O
+										rel: 0, // 관련 동영상 표시하지 않음
+										modestbranding: 1, // 컨트롤 바에 youtube 로고를 표시하지 않음
+									},
+								}}
+							/>
+						))}
+					</Carousel>
+					<div className="country-info">
+						<span>총 조회 수 : {count?.viewCount.toString()} / </span>
+						<span>총 좋아요 수 : {count?.likeCount.toString()}</span>
+					</div>
 					<button type="button" onClick={() => popupHooks.toggle()}>
 						dsadsasa
 					</button>
