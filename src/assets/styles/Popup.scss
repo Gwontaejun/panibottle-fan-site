@@ -1,39 +1,44 @@
 .popup-wrapper {
-	display: none;
+	display: block;
 	position: fixed;
 	top: 0;
 	left: 0;
 	z-index: -1000;
 	width: 100%;
 	height: 100%;
-	background-color: rgba(0, 0, 0, 0.5);
-	display: flex;
-	justify-content: center;
-	align-items: center;
 
-	.popup-content {
+	.popup-dim {
+		width: 100%;
+		height: 100%;
+		background-color: rgba(0, 0, 0, 0.5);
+		box-shadow: 0 1px 7px rgba(0, 0, 0, 0.5);
+	}
+
+	.popup-container {
+		display: flex;
+		flex-direction: column;
+		position: fixed;
+		inset: 0;
 		width: 50%;
 		height: 85%;
-		padding: 3rem 2rem 2rem 2rem;
+		margin: auto;
 		box-sizing: border-box;
 		background-color: #fff;
-		box-shadow: 0 1px 7px rgba(0, 0, 0, 0.5);
 		border-radius: 3%;
 		transform: translateY(20%);
 		opacity: 0;
 
-		img {
-			position: absolute;
-			top: -6%;
-			left: 2%;
-			width: 10%;
-		}
+		.popup-header {
+			padding: 3rem 2rem 1rem 2rem;
 
-		.country-header {
-			margin-bottom: 2rem;
-
+			img {
+				position: absolute;
+				top: -6%;
+				left: 2%;
+				width: 10%;
+			}
 			h1 {
-				margin-bottom: 0.5rem;
+				margin: 0.5rem 0;
 			}
 			span {
 				color: gray;
@@ -41,18 +46,47 @@
 				font-weight: 700;
 			}
 		}
-		.country-content {
-			height: 30rem;
 
-			.carousel-wrapper {
-				display: flex;
-				height: 100%;
+		.popup-content {
+			overflow: hidden;
+			overflow-y: scroll;
+			height: 71%;
+			padding: 0 2rem;
 
-				.carousel {
-					width: 95%;
+			.country-content {
+				height: 30rem;
+
+				.carousel-wrapper {
+					display: flex;
 					height: 100%;
-					margin: 0 auto;
+
+					.carousel {
+						width: 95%;
+						height: 100%;
+						margin: 0 auto;
+					}
 				}
+			}
+		}
+
+		.popup-bottom {
+			margin: auto;
+
+			button {
+				display: block;
+				position: relative;
+				left: 0;
+				right: 0;
+				width: 12rem;
+				height: 3.1rem;
+				margin: auto;
+				background-color: black;
+				color: white;
+				border: none;
+				border-radius: 2.55rem;
+				font-size: 1.8rem;
+				font-weight: 700;
+				cursor: pointer;
 			}
 		}
 	}
@@ -60,7 +94,7 @@
 	&.show {
 		display: flex;
 		z-index: 1000;
-		.popup-content {
+		.popup-container {
 			transform: translateY(0);
 			opacity: 1;
 			transition: all 0.3s;

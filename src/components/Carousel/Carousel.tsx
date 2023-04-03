@@ -9,7 +9,10 @@ const StyledSlider = styled(Slider)`
 	height: 90%;
 
 	.slick-list {
-		width: 100%;
+		left: 0;
+		right: 0;
+		margin: auto;
+		width: calc(100% - 4rem);
 		height: 100%;
 	}
 
@@ -50,15 +53,15 @@ const StyledSlider = styled(Slider)`
 	.slick-prev {
 		transform: rotate(180deg);
 		top: 0;
-		left: -2rem;
+		left: 0;
 	}
 
 	.slick-next {
-		right: -2rem;
+		right: 0;
 	}
 `;
 
-const Carousel = (props: { children?: any }) => (
+const Carousel = (props: { children?: JSX.Element[] }) => (
 	<StyledSlider
 		className="carousel"
 		centerMode
