@@ -78,7 +78,7 @@ const CountryPopup = ({ popupHooks }: { popupHooks: PopupHooks }) => {
 					(item): CommentType => ({
 						name: item.snippet.topLevelComment.snippet.authorDisplayName,
 						icon: item.snippet.topLevelComment.snippet.authorProfileImageUrl,
-						comment: item.snippet.topLevelComment.snippet.textDisplay,
+						comment: item.snippet.topLevelComment.snippet.textDisplay.replaceAll('<br>', '\n'),
 					})
 				);
 				commentResults.push(...comment);
@@ -98,7 +98,11 @@ const CountryPopup = ({ popupHooks }: { popupHooks: PopupHooks }) => {
 				<div className="popup-header">
 					<img src={info.icon_url} alt="국기 아이콘" />
 					<h1>{info.country_name}(Republic of Korea)</h1>
-					<span>Asia</span>
+					<span className="country-region">Asia</span>
+					<span className="country-count">
+						총합 조회 수 : {numeral(count?.viewCount).format('0,0')} | 좋아요 수 :{' '}
+						{numeral(count?.likeCount).format('0,0')}
+					</span>
 				</div>
 				<div className="popup-content">
 					<div className="country-content">
@@ -118,14 +122,20 @@ const CountryPopup = ({ popupHooks }: { popupHooks: PopupHooks }) => {
 								/>
 							))}
 						</Carousel>
-						<div className="country-info">
-							<span>총 조회 수 : {numeral(count?.viewCount).format('0a')} / </span>
-							<span>총 좋아요 수 : {numeral(count?.likeCount).format('0a')}</span>
-						</div>
 						<div className="country-comments">
-							{commentList.map((item) => (
-								<div>{item.comment}</div>
-							))}
+							<h3>댓글 모음</h3>
+							<hr />
+							<ul>
+								{commentList.map((item) => (
+									<li>
+										<img src={item.icon} alt="아이콘" />
+										<div>
+											<span>{item.name}</span>
+											<p>{item.comment}</p>
+										</div>
+									</li>
+								))}
+							</ul>
 						</div>
 					</div>
 				</div>

@@ -12,8 +12,9 @@ const StyledSlider = styled(Slider)`
 		left: 0;
 		right: 0;
 		margin: auto;
-		width: calc(100% - 4rem);
+		width: 100%;
 		height: 100%;
+		border-radius: 30px;
 	}
 
 	.slick-track {
@@ -32,7 +33,7 @@ const StyledSlider = styled(Slider)`
 	.slick-arrow {
 		display: block;
 		position: absolute;
-		width: 2rem;
+		width: 3rem;
 		height: 100%;
 
 		&:before {
@@ -53,11 +54,11 @@ const StyledSlider = styled(Slider)`
 	.slick-prev {
 		transform: rotate(180deg);
 		top: 0;
-		left: 0;
+		left: -3rem;
 	}
 
 	.slick-next {
-		right: 0;
+		right: -3rem;
 	}
 `;
 

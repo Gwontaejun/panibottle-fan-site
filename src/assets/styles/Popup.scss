@@ -24,25 +24,32 @@
 		margin: auto;
 		box-sizing: border-box;
 		background-color: #fff;
-		border-radius: 3%;
+		border-radius: 30px;
 		transform: translateY(20%);
 		opacity: 0;
 
 		.popup-header {
-			padding: 3rem 2rem 1rem 2rem;
+			padding: 3rem 3rem 1rem;
 
 			img {
 				position: absolute;
 				top: -6%;
-				left: 2%;
+				left: 3rem;
 				width: 10%;
 			}
 			h1 {
-				margin: 0.5rem 0;
+				margin: 1rem 0;
 			}
-			span {
+			.country-region {
 				color: gray;
 				font-size: 20px;
+				font-weight: 700;
+			}
+			.country-count {
+				position: absolute;
+				right: 3rem;
+				left: auto;
+				font-size: 16px;
 				font-weight: 700;
 			}
 		}
@@ -51,7 +58,7 @@
 			overflow: hidden;
 			overflow-y: scroll;
 			height: 71%;
-			padding: 0 2rem;
+			padding: 0 3rem;
 
 			.country-content {
 				height: 30rem;
@@ -64,6 +71,43 @@
 						width: 95%;
 						height: 100%;
 						margin: 0 auto;
+					}
+				}
+
+				.country-comments {
+					margin-top: 2rem;
+
+					h3 {
+						margin-bottom: 0;
+					}
+
+					ul {
+						padding: 0;
+						list-style: none;
+						li {
+							display: flex;
+							padding: 1rem;
+							justify-content: space-between;
+							img {
+								width: 4rem;
+								height: 4rem;
+								border-radius: 50%;
+							}
+							div {
+								width: calc(100% - 5rem);
+
+								span {
+									font-weight: 700;
+								}
+								p {
+									word-break: break-all;
+									white-space: break-spaces;
+									margin: 0.5rem 0 0;
+									font-weight: 700;
+									color: #777777;
+								}
+							}
+						}
 					}
 				}
 			}
@@ -84,7 +128,7 @@
 				color: white;
 				border: none;
 				border-radius: 2.55rem;
-				font-size: 1.8rem;
+				font-size: 1.5rem;
 				font-weight: 700;
 				cursor: pointer;
 			}
