@@ -2,6 +2,7 @@ import React from 'react';
 import FocusTrap from 'focus-trap-react';
 
 import 'assets/styles/Popup.scss';
+import styled from 'styled-components';
 
 export interface PopupHooks {
 	isShowing: boolean;
@@ -15,15 +16,30 @@ interface PopupTypes {
 	children: React.ReactNode;
 }
 
+const PopupWrapper = styled.div`
+	color: ${(props) => props.theme.popupColor};
+
+	.popup-container {
+		background-color: ${(props) => props.theme.popupBgColor};
+
+		.popup-bottom {
+			button {
+				color: ${(props) => props.theme.popupButtonColor}
+				background-color: ${(props) => props.theme.popupButtonBgColor}
+			}
+		}
+	}
+`;
+
 const Popup = (props: PopupTypes) => {
 	const { popupHooks, className } = props;
 
 	return (
 		<FocusTrap active={popupHooks.isShowing}>
-			<div className={`popup-wrapper ${className} ${popupHooks.isShowing ? 'show' : ''}`}>
+			<PopupWrapper className={`popup-wrapper ${className} ${popupHooks.isShowing ? 'show' : ''}`}>
 				<div className="popup-dim" />
 				{props?.children}
-			</div>
+			</PopupWrapper>
 		</FocusTrap>
 	);
 };

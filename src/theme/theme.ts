@@ -6,6 +6,10 @@ export const lightTheme = {
 	navItemHoverBgColor: '#282c35',
 	navItemColor: '#000',
 	navItemHoverColor: '#FFF',
+	popupBgColor: '#FFF',
+	popupColor: '#000',
+	popupButtonBgColor: '#000',
+	popupButtonColor: '#FFF',
 };
 
 export const darkTheme = {
@@ -16,6 +20,10 @@ export const darkTheme = {
 	navItemHoverBgColor: '#FFF',
 	navItemColor: '#FFF',
 	navItemHoverColor: '#000',
+	popupBgColor: '#282c35',
+	popupColor: '#D7D7D7',
+	popupButtonBgColor: '#5B5F67',
+	popupButtonColor: '#D7D7D7',
 };
 
 export default {
