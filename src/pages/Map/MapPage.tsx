@@ -1,5 +1,5 @@
 import React, { Suspense, useRef, useState, useEffect } from 'react';
-import { getDocs, query, where } from 'firebase/firestore';
+import { getDocs, orderBy, query, where } from 'firebase/firestore';
 import { countryCollection, videoCollection } from 'firebaseStore';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { darkModeState } from 'store/commonStore';
@@ -47,7 +47,9 @@ const MapPage = () => {
 	};
 
 	const onClickMarker = async (data: MarkerProps): Promise<void> => {
-		const docData = await getDocs(query(videoCollection, where('country_code', '==', data.country_code)));
+		const docData = await getDocs(
+			query(videoCollection, where('country_code', '==', data.country_code), orderBy('index', 'asc'))
+		);
 		const videoIds = docData.docs.map((item) => item.data().video_id);
 		setCountryInfo(data);
 		setCountryVideos(videoIds);

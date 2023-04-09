@@ -6,6 +6,7 @@ import { ThemeProvider } from 'styled-components';
 import { Header } from 'components';
 import MainPage from 'pages/Main/MainPage';
 import MapPage from 'pages/Map/MapPage';
+import ManagementPage from 'pages/Management/ManagementPage';
 import { lightTheme, darkTheme } from 'theme/theme';
 
 const ThemePage = () => {
@@ -14,10 +15,13 @@ const ThemePage = () => {
 	return (
 		<ThemeProvider theme={isDarkMode ? darkTheme : lightTheme}>
 			<Header />
-			<Routes>
-				<Route path="/" element={<MainPage />} />
-				<Route path="/map" element={<MapPage />} />
-			</Routes>
+			<section>
+				<Routes>
+					<Route path="/" element={<MainPage />} />
+					<Route path="/map" element={<MapPage />} />
+					<Route path="/management" element={<ManagementPage />} />
+				</Routes>
+			</section>
 		</ThemeProvider>
 	);
 };

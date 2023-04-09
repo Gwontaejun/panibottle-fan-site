@@ -14,6 +14,13 @@ body,
 	font-family: 'defaultFont';
 }
 
+section {
+	height: 92%;
+	width: 100%;
+	position: absolute;
+	top: 8%;
+}
+
 ::-webkit-scrollbar {
 	width: 10px;
 }

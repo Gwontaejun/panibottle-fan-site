@@ -67,7 +67,7 @@ const CountryPopup = ({ popupHooks }: { popupHooks: PopupHooks }) => {
 							key: process.env.REACT_APP_GOOGLE_API_KEY,
 							part: 'snippet',
 							videoId: item,
-							maxResults: 10,
+							maxResults: 20,
 						},
 					})
 				)

@@ -46,6 +46,7 @@ const Header = () => {
 		{ path: '/map', label: '맵' },
 		{ path: '/board', label: '게시판' },
 		{ path: '/notice', label: '공지사항' },
+		{ path: '/management', label: '나라설정(admin)' },
 	];
 
 	return (
