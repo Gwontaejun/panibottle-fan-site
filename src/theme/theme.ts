@@ -1,4 +1,5 @@
 export const lightTheme = {
+	scrollThumbColor: '#616161',
 	bgColor: '#ff6600',
 	headerBgColor: '#FFF',
 	headerHoverBgColor: '#fff',
@@ -10,9 +11,12 @@ export const lightTheme = {
 	popupColor: '#000',
 	popupButtonBgColor: '#000',
 	popupButtonColor: '#FFF',
+	skeletonColor: 'lightgrey',
+	carouselArrowColor: '#000',
 };
 
 export const darkTheme = {
+	scrollThumbColor: 'lightgrey',
 	bgColor: '#282c35',
 	headerBgColor: 'rgba(0, 0, 0, 0.4)',
 	headerHoverBgColor: '#282c35',
@@ -24,6 +28,8 @@ export const darkTheme = {
 	popupColor: '#D7D7D7',
 	popupButtonBgColor: '#5B5F67',
 	popupButtonColor: '#D7D7D7',
+	skeletonColor: '#616161',
+	carouselArrowColor: '#FFF',
 };
 
 export default {

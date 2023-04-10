@@ -88,17 +88,13 @@
 							display: flex;
 							padding: 1rem;
 							justify-content: space-between;
-							img {
-								width: 4rem;
-								height: 4rem;
-								border-radius: 50%;
-							}
 							div {
 								width: calc(100% - 5rem);
 
 								span {
 									font-weight: 700;
 								}
+
 								p {
 									word-break: break-all;
 									white-space: break-spaces;
@@ -124,8 +120,6 @@
 				width: 12rem;
 				height: 3.1rem;
 				margin: auto;
-				background-color: black;
-				color: white;
 				border: none;
 				border-radius: 2.55rem;
 				font-size: 1.5rem;

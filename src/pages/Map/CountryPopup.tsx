@@ -1,12 +1,40 @@
-import React, { useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import axios from 'axios';
 import Youtube from 'react-youtube';
+import styled from 'styled-components';
 import { useRecoilValue, useResetRecoilState } from 'recoil';
 import { countryInfo, countryVideo } from 'store/mapStore';
 import { Popup } from 'components';
 import { PopupHooks } from 'components/Popup/Popup';
 import Carousel from 'components/Carousel/Carousel';
 import numeral from 'numeral';
+
+const CommentIcon = styled.img`
+	width: 4rem;
+	height: 4rem;
+	border: none;
+	border-radius: 50%;
+	&.skeleton {
+		background-color: ${(props) => props.theme.skeletonColor};
+	}
+`;
+
+const CommentSkeleton = styled.div`
+	background-image: linear-gradient(${(props) => props.theme.skeletonColor} 15px, transparent 0),
+		linear-gradient(${(props) => props.theme.skeletonColor} 15px, transparent 0),
+		linear-gradient(${(props) => props.theme.skeletonColor} 15px, transparent 0);
+
+	background-repeat: repeat-y;
+
+	background-position: 5px 0px, 5px 30px, 5px 50px;
+
+	background-size: 100px 100px, 300px 100px, 300px 100px;
+`;
+
+const PopupButton = styled.button`
+	background-color: ${(props) => props.theme.popupButtonBgColor};
+	color: ${(props) => props.theme.popupButtonColor};
+`;
 
 interface CountType {
 	viewCount: number;
@@ -20,21 +48,32 @@ interface CommentType {
 }
 
 const CountryPopup = ({ popupHooks }: { popupHooks: PopupHooks }) => {
+	const readyLength = useRef<number>(0);
 	const info = useRecoilValue(countryInfo);
-	const resetInfo = useResetRecoilState(countryInfo);
 	const videos = useRecoilValue(countryVideo);
+	const resetInfo = useResetRecoilState(countryInfo);
 	const resetVideos = useResetRecoilState(countryVideo);
 	const [count, setCount] = useState<CountType>();
 	const [commentList, setCommentList] = useState<CommentType[]>([]);
+	const [isReady, setIsReady] = useState(false);
 
 	useEffect(() => {
 		if (popupHooks.isShowing) {
 			loadData();
 		} else {
+			readyLength.current = 0;
+			setIsReady(false);
 			resetInfo();
 			resetVideos();
 		}
 	}, [popupHooks.isShowing]);
+
+	const onVideoReady = () => {
+		readyLength.current += 1;
+		if (readyLength.current === videos.length) {
+			setIsReady(true);
+		}
+	};
 
 	const loadData = async () => {
 		const idQueryParams = videos.map((item) => `id=${item}`).join('&');
@@ -92,12 +131,30 @@ const CountryPopup = ({ popupHooks }: { popupHooks: PopupHooks }) => {
 		setCount({ viewCount, likeCount });
 	};
 
+	const renderComment = () =>
+		isReady ? (
+			commentList.map((item) => (
+				<li>
+					<CommentIcon src={item.icon} alt="아이콘" />
+					<div>
+						<span>{item.name}</span>
+						<p>{item.comment}</p>
+					</div>
+				</li>
+			))
+		) : (
+			<li>
+				<CommentIcon src={undefined} className="skeleton" />
+				<CommentSkeleton />
+			</li>
+		);
+
 	return (
 		<Popup popupHooks={popupHooks}>
 			<div className="popup-container">
 				<div className="popup-header">
 					<img src={info.icon_url} alt="국기 아이콘" />
-					<h1>{info.country_name}(Republic of Korea)</h1>
+					<h1>{info.country_name}</h1>
 					<span className="country-region">Asia</span>
 					<span className="country-count">
 						총합 조회 수 : {numeral(count?.viewCount).format('0,0')} | 좋아요 수 :{' '}
@@ -106,7 +163,7 @@ const CountryPopup = ({ popupHooks }: { popupHooks: PopupHooks }) => {
 				</div>
 				<div className="popup-content">
 					<div className="country-content">
-						<Carousel>
+						<Carousel isReady={isReady}>
 							{videos.map((item) => (
 								<Youtube
 									videoId={item}
@@ -119,30 +176,29 @@ const CountryPopup = ({ popupHooks }: { popupHooks: PopupHooks }) => {
 											modestbranding: 1, // 컨트롤 바에 youtube 로고를 표시하지 않음
 										},
 									}}
+									onReady={onVideoReady}
 								/>
 							))}
 						</Carousel>
 						<div className="country-comments">
 							<h3>댓글 모음</h3>
 							<hr />
-							<ul>
-								{commentList.map((item) => (
+							<ul>{popupHooks.isShowing && renderComment()}</ul>
+							{/* <ul>
+								<ul>
 									<li>
-										<img src={item.icon} alt="아이콘" />
-										<div>
-											<span>{item.name}</span>
-											<p>{item.comment}</p>
-										</div>
+										<CommentIcon src={undefined} className="skeleton" />
+										<CommentSkeleton />
 									</li>
-								))}
-							</ul>
+								</ul>
+							</ul> */}
 						</div>
 					</div>
 				</div>
 				<div className="popup-bottom">
-					<button type="button" onClick={() => popupHooks.toggle()}>
+					<PopupButton type="button" onClick={() => popupHooks.toggle()}>
 						닫기
-					</button>
+					</PopupButton>
 				</div>
 			</div>
 		</Popup>

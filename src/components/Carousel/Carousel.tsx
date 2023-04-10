@@ -8,6 +8,19 @@ import 'slick-carousel/slick/slick-theme.css';
 const StyledSlider = styled(Slider)`
 	height: 90%;
 
+	&.no-ready {
+		.slick-list {
+			&:before {
+				content: '';
+				display: block;
+				z-index: 99;
+				width: 100%;
+				height: 100%;
+				background: ${(props) => props.theme.skeletonColor};
+			}
+		}
+	}
+
 	.slick-list {
 		left: 0;
 		right: 0;
@@ -45,7 +58,7 @@ const StyledSlider = styled(Slider)`
 			width: 0;
 			height: 0;
 			border-right: 10px solid transparent;
-			border-left: 20px solid black;
+			border-left: 20px solid ${(props) => props.theme.carouselArrowColor};
 			border-top: 20px solid transparent;
 			border-bottom: 20px solid transparent;
 		}
@@ -62,15 +75,14 @@ const StyledSlider = styled(Slider)`
 	}
 `;
 
-const Carousel = (props: { children?: JSX.Element[] }) => (
+const Carousel = (props: { isReady: boolean; children?: JSX.Element[] }) => (
 	<StyledSlider
-		className="carousel"
+		className={`carousel ${props?.isReady ? '' : 'no-ready'}`}
 		centerMode
 		centerPadding={0}
 		infinite
 		speed={500}
 		slidesToShow={1}
-		// arrows={false}
 	>
 		{props?.children}
 	</StyledSlider>
