@@ -1,14 +1,10 @@
 import React from 'react';
 import GoogleMapReact from 'google-map-react-concurrent';
 import { lightMode, darkMode } from './MapStyles';
+import { Bounds, CountryInfo } from 'types/CountryType';
 import _ from 'lodash';
 
 import 'assets/styles/Map.scss';
-
-interface Bounds {
-	lat: number;
-	lng: number;
-}
 
 interface MapProps {
 	isDarkMode: boolean;
@@ -17,12 +13,7 @@ interface MapProps {
 	onClickMarker: (data: MarkerProps) => void;
 }
 
-export interface MarkerProps extends Bounds {
-	country_code: string;
-	country_name: string;
-	icon_url: string;
-	region: string;
-	description: string;
+export interface MarkerProps extends CountryInfo {
 	onClickMarker?: (data: MarkerProps) => void;
 }
 

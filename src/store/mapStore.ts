@@ -1,12 +1,15 @@
 import { atom } from 'recoil';
+import { CountryInfo } from 'types/CountryType';
 
-export const countryInfo = atom({
+export const countryInfo = atom<CountryInfo>({
 	key: 'countryInfo',
 	default: {
+		country_code: '',
 		country_name: '',
-		description: '',
 		icon_url: '',
 		region: '',
+		lat: 0,
+		lng: 0,
 	},
 	dangerouslyAllowMutability: true,
 });

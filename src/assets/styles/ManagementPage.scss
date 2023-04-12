@@ -1,0 +1,43 @@
+.management-wrapper {
+	display: flex;
+	justify-content: space-around;
+	width: 100%;
+	height: calc(100% - 4rem);
+	padding: 2rem;
+
+	.list-wrapper {
+		display: flex;
+		flex-direction: column;
+		overflow: hidden;
+		height: 100%;
+		margin: 0;
+		border: 1px solid black;
+		width: 30%;
+		border-radius: 3%;
+
+        .region-tab {
+            font-family: 'defaultFont';
+            font-weight: 700;
+        }
+
+		.country-list {
+			padding: 0;
+			margin: 0;
+			li {
+				display: flex;
+				justify-content: flex-start;
+				height: 10%;
+				border: 1px solid black;
+				img {
+					margin: auto 0 auto 1rem;
+				}
+			}
+		}
+	}
+
+	ul {
+		list-style: none;
+		overflow-y: auto;
+		height: 100%;
+	}
+}

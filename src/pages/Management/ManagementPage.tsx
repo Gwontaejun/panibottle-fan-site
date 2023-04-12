@@ -1,16 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { writeBatch, doc, getDocs, query, where } from 'firebase/firestore';
-import firestore, { videoCollection } from 'firebaseStore';
-
-interface CountryInfoType {
-	country_code: string | undefined;
-	country_name: string | undefined;
-	description: string | undefined;
-	icon_url: string | undefined;
-	latitude: string | undefined;
-	longitude: string | undefined;
-	region: string | undefined;
-}
+import { getDocs, query, where } from 'firebase/firestore';
+import { countryCollection, videoCollection } from 'firebaseStore';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import { CountryInfo } from 'types/CountryType';
+import 'assets/styles/ManagementPage.scss';
 
 interface VideoInfoType {
 	doc_id?: string | undefined;
@@ -20,15 +16,15 @@ interface VideoInfoType {
 }
 
 const ManagementPage = () => {
-	const [countryInfo, setCountryInfo] = useState<CountryInfoType>({
-		country_code: '',
-		country_name: '',
-		description: '',
-		icon_url: '',
-		latitude: '',
-		longitude: '',
-		region: '',
-	});
+	// const [countryInfo] = useState<CountryInfoType>({
+	// 	country_code: '',
+	// 	country_name: '',
+	// 	description: '',
+	// 	icon_url: '',
+	// 	latitude: '',
+	// 	longitude: '',
+	// 	region: '',
+	// });
 	const [countryCode] = useState<string>('kr');
 	const [videos, setVideos] = useState<VideoInfoType[]>([]);
 
@@ -51,78 +47,114 @@ const ManagementPage = () => {
 		setVideos(data);
 	};
 
-	const onChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setCountryInfo({ ...countryInfo, [e.target.id]: e.target.value });
-	};
+	// const onChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+	// 	setCountryInfo({ ...countryInfo, [e.target.id]: e.target.value });
+	// };
 
-	const onVideoInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-		const cloneVideo = [...videos];
-		cloneVideo[Number(e.target.id)] = { ...cloneVideo[Number(e.target.id)], video_id: e.target.value };
-		setVideos(cloneVideo);
-	};
+	// const onVideoInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+	// 	const cloneVideo = [...videos];
+	// 	cloneVideo[Number(e.target.id)] = { ...cloneVideo[Number(e.target.id)], video_id: e.target.value };
+	// 	setVideos(cloneVideo);
+	// };
 
-	const onVideoPush = () => {
-		setVideos([...videos, { index: videos.length, country_code: countryCode, video_id: '' }]);
-	};
+	// const onVideoPush = () => {
+	// 	setVideos([...videos, { index: videos.length, country_code: countryCode, video_id: '' }]);
+	// };
 
-	const onAddCountry = () => {
-		console.log('info', countryInfo);
-	};
+	// const onAddVideo = async () => {
+	// 	const batch = writeBatch(firestore);
 
-	const onAddVideo = async () => {
-		const batch = writeBatch(firestore);
+	// 	videos.forEach((item) => {
+	// 		if (item.doc_id) {
+	// 			batch.update(doc(videoCollection, item.doc_id), {
+	// 				index: item.index,
+	// 				country_code: countryCode,
+	// 				video_id: item.video_id,
+	// 			});
+	// 		} else {
+	// 			batch.set(doc(videoCollection), { index: item.index, country_code: countryCode, video_id: item.video_id });
+	// 		}
+	// 	});
 
-		videos.forEach((item) => {
-			if (item.doc_id) {
-				batch.update(doc(videoCollection, item.doc_id), {
-					index: item.index,
-					country_code: countryCode,
-					video_id: item.video_id,
-				});
-			} else {
-				batch.set(doc(videoCollection), { index: item.index, country_code: countryCode, video_id: item.video_id });
-			}
-		});
-
-		await batch.commit();
-	};
+	// 	await batch.commit();
+	// };
 
 	return (
-		<div style={{ display: 'flex', justifyContent: 'space-around' }}>
-			<div>
-				<h2>코드</h2>
-				<input id="country_code" value={countryInfo?.country_code} onChange={onChangeInput} />
-				<h2>이름</h2>
-				<input id="country_name" value={countryInfo?.country_name} onChange={onChangeInput} />
-				<h2>설명</h2>
-				<input id="description" value={countryInfo?.description} onChange={onChangeInput} />
-				<h2>아이콘 주소</h2>
-				<input id="icon_url" value={countryInfo?.icon_url} onChange={onChangeInput} />
-				<h2>위도</h2>
-				<input id="latitude" value={countryInfo?.latitude} onChange={onChangeInput} />
-				<h2>경도</h2>
-				<input id="longitude" value={countryInfo?.longitude} onChange={onChangeInput} />
-				<h2>대륙</h2>
-				<input id="region" value={countryInfo?.region} onChange={onChangeInput} />
-				<h2>등록</h2>
-				<button type="button" onClick={onAddCountry}>
-					등록
-				</button>
+		<div className="management-wrapper">
+			<CountryList />
+			<div className="list-wrapper">
+				<ul>
+					{videos.map((item) => (
+						<li key={item.index} id={item.index?.toString()}>
+							{item.video_id}
+						</li>
+					))}
+				</ul>
 			</div>
-			<div>
-				<h2>코드</h2>
-				<input id="country_code" value={countryCode} onChange={onVideoInput} />
-				<h2>영상 아이디</h2>
-				<button type="button" onClick={onVideoPush}>
-					추가
-				</button>
-				{videos.map((item) => (
-					<input key={item.index} id={item.index?.toString()} value={item.video_id} onChange={onVideoInput} />
+		</div>
+	);
+};
+
+const CountryList = () => {
+	const [region, setRegion] = useState('as');
+	const [countryList, setCountryList] = useState<CountryInfo[]>([]);
+
+	useEffect(() => {
+		loadData();
+	}, [region]);
+
+	const loadData = async () => {
+		const countryObject = await getDocs(query(countryCollection, where('region', '==', region)));
+
+		const result: CountryInfo[] = countryObject.docs.map((item): CountryInfo => {
+			const data = item.data();
+
+			return {
+				doc_id: item.id,
+				icon_url: data.icon_url,
+				country_name: data.country_name,
+				country_code: data.country_code,
+				lat: data.latitude,
+				lng: data.longitude,
+			};
+		});
+		setCountryList(result);
+	};
+
+	const onRegionChange = (e: React.BaseSyntheticEvent, tabValue: string) => {
+		setRegion(tabValue);
+	};
+	return (
+		<div className="list-wrapper">
+			<Tabs value={region} onChange={onRegionChange} variant="fullWidth">
+				<Tab className="region-tab" value="as" label="아시아" />
+				<Tab className="region-tab" value="eu" label="유럽" />
+				<Tab className="region-tab" value="na" label="북미" />
+				<Tab className="region-tab" value="sa" label="남미" />
+				<Tab className="region-tab" value="oc" label="오세아니아" />
+			</Tabs>
+			<ul className="country-list">
+				{countryList.map((country: CountryInfo) => (
+					<ListItem
+						secondaryAction={
+							<>
+								<button style={{ zIndex: 99 }} type="button">
+									수정
+								</button>
+								<button style={{ zIndex: 99 }} type="button">
+									삭제
+								</button>
+							</>
+						}
+						disablePadding
+					>
+						<ListItemButton>
+							<img src={country.icon_url} alt="이미지" />
+							<span>{country.country_name}</span>
+						</ListItemButton>
+					</ListItem>
 				))}
-				<button type="button" onClick={onAddVideo}>
-					등록
-				</button>
-			</div>
+			</ul>
 		</div>
 	);
 };

@@ -7,10 +7,11 @@ import { countryInfo, countryVideo } from 'store/mapStore';
 import { Map } from 'components';
 import { usePopup } from 'hooks';
 import CountryPopup from './CountryPopup';
-import 'assets/styles/MapPage.scss';
 
 // 맵 Props Interface
 import { MarkerProps } from 'components/Map/Map';
+
+import 'assets/styles/MapPage.scss';
 
 const MapPage = () => {
 	const countryPopup = usePopup();
@@ -39,7 +40,6 @@ const MapPage = () => {
 				region: value.region,
 				lat: value.latitude,
 				lng: value.longitude,
-				description: value.description,
 			});
 		});
 
