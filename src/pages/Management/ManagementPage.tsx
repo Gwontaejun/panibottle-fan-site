@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
 import { getDocs, query, where } from 'firebase/firestore';
 import { countryCollection, videoCollection } from 'firebaseStore';
 import Tabs from '@mui/material/Tabs';
@@ -13,7 +14,38 @@ interface VideoInfoType {
 	index: number;
 	country_code: string;
 	video_id: string;
+	video_title: string;
 }
+
+const ThemeListItemButton = styled(ListItemButton)`
+	&.on {
+		&:before {
+			content: '';
+			display: inline-block;
+			position: absolute;
+			width: 24px;
+			height: 24px;
+			background: url(${(props) => props.theme.checkIcon});
+			transition: background 0.3s;
+		}
+	}
+`;
+
+const ThemeEditButton = styled(ListItemButton)`
+	width: 40px;
+	height: 40px;
+	background: url(${(props) => props.theme.editIcon}) no-repeat center;
+	background-size: 40px;
+	transition: background 0.3s !important;
+`;
+
+const ThemeDeleteButton = styled(ListItemButton)`
+	width: 40px;
+	height: 40px;
+	background: url(${(props) => props.theme.deleteIcon}) no-repeat center;
+	background-size: 40px;
+	transition: background 0.3s !important;
+`;
 
 const ManagementPage = () => {
 	// const [countryInfo] = useState<CountryInfoType>({
@@ -41,6 +73,7 @@ const ManagementPage = () => {
 				index: videoData.index,
 				country_code: videoData.country_code,
 				video_id: videoData.video_id,
+				video_title: videoData.video_title,
 			};
 		});
 
@@ -81,15 +114,30 @@ const ManagementPage = () => {
 
 	return (
 		<div className="management-wrapper">
-			<CountryList />
-			<div className="list-wrapper">
-				<ul>
-					{videos.map((item) => (
-						<li key={item.index} id={item.index?.toString()}>
-							{item.video_id}
-						</li>
-					))}
-				</ul>
+			<div>
+				<h2>나라</h2>
+				<CountryList />
+			</div>
+			<div>
+				<h2>나라별 영상</h2>
+				<div className="list-wrapper">
+					<ul className="list">
+						{videos.map((item) => (
+							<ListItem
+								className="list-button"
+								secondaryAction={
+									<div style={{ display: 'flex' }}>
+										<ThemeEditButton style={{ zIndex: 99 }} />
+										<ThemeDeleteButton style={{ zIndex: 99 }} />
+									</div>
+								}
+								disablePadding
+							>
+								<ListItemButton className="list-button">{item.video_title}</ListItemButton>
+							</ListItem>
+						))}
+					</ul>
+				</div>
 			</div>
 		</div>
 	);
@@ -133,25 +181,21 @@ const CountryList = () => {
 				<Tab className="region-tab" value="sa" label="남미" />
 				<Tab className="region-tab" value="oc" label="오세아니아" />
 			</Tabs>
-			<ul className="country-list">
+			<ul className="list">
 				{countryList.map((country: CountryInfo) => (
 					<ListItem
 						secondaryAction={
-							<>
-								<button style={{ zIndex: 99 }} type="button">
-									수정
-								</button>
-								<button style={{ zIndex: 99 }} type="button">
-									삭제
-								</button>
-							</>
+							<div style={{ display: 'flex' }}>
+								<ThemeEditButton style={{ zIndex: 99 }} />
+								<ThemeDeleteButton style={{ zIndex: 99 }} />
+							</div>
 						}
 						disablePadding
 					>
-						<ListItemButton>
+						<ThemeListItemButton className="list-button on">
 							<img src={country.icon_url} alt="이미지" />
 							<span>{country.country_name}</span>
-						</ListItemButton>
+						</ThemeListItemButton>
 					</ListItem>
 				))}
 			</ul>

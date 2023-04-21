@@ -16,5 +16,8 @@ declare module 'styled-components' {
 		popupButtonColor: string;
 		skeletonColor: string;
 		carouselArrowColor: string;
+		checkIcon: string;
+		editIcon: string;
+		deleteIcon: string;
 	}
 }

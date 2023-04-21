@@ -13,6 +13,9 @@ export const lightTheme = {
 	popupButtonColor: '#FFF',
 	skeletonColor: 'lightgrey',
 	carouselArrowColor: '#000',
+	checkIcon: require('assets/images/light_check.svg').default,
+	editIcon: require('assets/images/light_edit.svg').default,
+	deleteIcon: require('assets/images/light_delete.svg').default,
 };
 
 export const darkTheme = {
@@ -30,6 +33,9 @@ export const darkTheme = {
 	popupButtonColor: '#D7D7D7',
 	skeletonColor: '#616161',
 	carouselArrowColor: '#FFF',
+	checkIcon: require('assets/images/dark_check.svg').default,
+	editIcon: require('assets/images/dark_edit.svg').default,
+	deleteIcon: require('assets/images/dark_delete.svg').default,
 };
 
 export default {
