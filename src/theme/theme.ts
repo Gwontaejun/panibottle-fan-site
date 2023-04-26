@@ -16,6 +16,7 @@ export const lightTheme = {
 	checkIcon: require('assets/images/light_check.svg').default,
 	editIcon: require('assets/images/light_edit.svg').default,
 	deleteIcon: require('assets/images/light_delete.svg').default,
+	addIcon: require('assets/images/light_add.svg').default,
 };
 
 export const darkTheme = {
@@ -36,6 +37,7 @@ export const darkTheme = {
 	checkIcon: require('assets/images/dark_check.svg').default,
 	editIcon: require('assets/images/dark_edit.svg').default,
 	deleteIcon: require('assets/images/dark_delete.svg').default,
+	addIcon: require('assets/images/dark_add.svg').default,
 };
 
 export default {

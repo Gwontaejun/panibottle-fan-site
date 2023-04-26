@@ -7,6 +7,7 @@ import { countryInfo, countryVideo } from 'store/mapStore';
 import { Popup } from 'components';
 import { PopupHooks } from 'components/Popup/Popup';
 import Carousel from 'components/Carousel/Carousel';
+import ThemeButton from 'components/Button/ThemeButton';
 import numeral from 'numeral';
 
 const CommentIcon = styled.img`
@@ -31,7 +32,8 @@ const CommentSkeleton = styled.div`
 	background-size: 100px 100px, 300px 100px, 300px 100px;
 `;
 
-const PopupButton = styled.button`
+const PopupButton = styled(ThemeButton)`
+	cursor: pointer;
 	background-color: ${(props) => props.theme.popupButtonBgColor};
 	color: ${(props) => props.theme.popupButtonColor};
 `;

@@ -1,12 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { getDocs, query, where } from 'firebase/firestore';
 import { countryCollection, videoCollection } from 'firebaseStore';
+import ThemeButton from 'components/Button/ThemeButton';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
+import ListItemText from '@mui/material/ListItemText';
 import { CountryInfo } from 'types/CountryType';
+import { ReactSortable } from 'react-sortablejs';
 import 'assets/styles/ManagementPage.scss';
 
 interface VideoInfoType {
@@ -14,7 +17,12 @@ interface VideoInfoType {
 	index: number;
 	country_code: string;
 	video_id: string;
-	video_title: string;
+	description: string;
+}
+
+interface SortableList extends VideoInfoType {
+	id: number;
+	name: string | undefined;
 }
 
 const ThemeListItemButton = styled(ListItemButton)`
@@ -26,59 +34,32 @@ const ThemeListItemButton = styled(ListItemButton)`
 			width: 24px;
 			height: 24px;
 			background: url(${(props) => props.theme.checkIcon});
-			transition: background 0.3s;
 		}
 	}
 `;
 
-const ThemeEditButton = styled(ListItemButton)`
+const IconButton = styled(ListItemButton)`
 	width: 40px;
 	height: 40px;
-	background: url(${(props) => props.theme.editIcon}) no-repeat center;
-	background-size: 40px;
+	background-size: 40px !important;
 	transition: background 0.3s !important;
 `;
 
-const ThemeDeleteButton = styled(ListItemButton)`
-	width: 40px;
-	height: 40px;
+const ThemeEditButton = styled(IconButton)`
+	background: url(${(props) => props.theme.editIcon}) no-repeat center;
+`;
+
+const ThemeDeleteButton = styled(IconButton)`
 	background: url(${(props) => props.theme.deleteIcon}) no-repeat center;
-	background-size: 40px;
-	transition: background 0.3s !important;
+`;
+
+const AddListButton = styled(IconButton)`
+	height: 100%;
+	background: url(${(props) => props.theme.addIcon}) no-repeat center;
 `;
 
 const ManagementPage = () => {
-	// const [countryInfo] = useState<CountryInfoType>({
-	// 	country_code: '',
-	// 	country_name: '',
-	// 	description: '',
-	// 	icon_url: '',
-	// 	latitude: '',
-	// 	longitude: '',
-	// 	region: '',
-	// });
-	const [countryCode] = useState<string>('kr');
-	const [videos, setVideos] = useState<VideoInfoType[]>([]);
-
-	useEffect(() => {
-		loadData();
-	}, []);
-
-	const loadData = async () => {
-		const videoObject = await getDocs(query(videoCollection, where('country_code', '==', countryCode)));
-		const data: VideoInfoType[] = videoObject.docs.map((item) => {
-			const videoData = item.data();
-			return {
-				doc_id: item.id,
-				index: videoData.index,
-				country_code: videoData.country_code,
-				video_id: videoData.video_id,
-				video_title: videoData.video_title,
-			};
-		});
-
-		setVideos(data);
-	};
+	const [countryCode, setCountryCode] = useState<string>('kr');
 
 	// const onChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
 	// 	setCountryInfo({ ...countryInfo, [e.target.id]: e.target.value });
@@ -114,36 +95,116 @@ const ManagementPage = () => {
 
 	return (
 		<div className="management-wrapper">
-			<div>
-				<h2>나라</h2>
-				<CountryList />
-			</div>
-			<div>
+			<CountryList countryCode={countryCode} onSelectCountry={(code: string) => setCountryCode(code)} />
+			<VideoList countryCode={countryCode} />
+		</div>
+	);
+};
+
+const VideoList = (props: { countryCode: string }) => {
+	const { countryCode } = props;
+	const deleteList = useRef<string[]>([]);
+	const [videos, setVideos] = useState<VideoInfoType[]>([]);
+
+	useEffect(() => {
+		loadData();
+	}, [countryCode]);
+
+	const loadData = async () => {
+		const videoObject = await getDocs(query(videoCollection, where('country_code', '==', countryCode)));
+		const data: VideoInfoType[] = videoObject.docs.map((item) => {
+			const videoData = item.data();
+			return {
+				doc_id: item.id,
+				index: videoData.index,
+				country_code: videoData.country_code,
+				video_id: videoData.video_id,
+				description: videoData.description,
+			};
+		});
+
+		setVideos(data);
+	};
+
+	const onChangeOrder = (list: SortableList[]) => {
+		// index 변경
+		const orderList = list.map((item: SortableList, index: number) => ({
+			...item,
+			index,
+		}));
+
+		setVideos(orderList);
+	};
+
+	const onDeleteVideos = (id: string) => {
+		const findVideo = videos.find((item) => item.video_id === id);
+
+		if (findVideo?.doc_id) {
+			deleteList.current.push(findVideo?.doc_id);
+		}
+
+		const deleteOrderList = videos.filter((item) => item.video_id !== id).map((video, index) => ({ ...video, index }));
+
+		setVideos(deleteOrderList);
+	};
+
+	return (
+		<div className="management-content">
+			<div className="content-header">
 				<h2>나라별 영상</h2>
+			</div>
+			<div className="content-body">
 				<div className="list-wrapper">
-					<ul className="list">
-						{videos.map((item) => (
+					<ReactSortable
+						tag="ul"
+						className="list video-list"
+						list={videos.map((item): SortableList => ({ ...item, id: item.index, name: item.doc_id }))}
+						setList={onChangeOrder}
+						animation={300}
+						handle=".dragHandle"
+						ghostClass=".list-button"
+						onMove={(e) => {
+							if (e.related.classList.contains('add-list')) {
+								return false;
+							}
+
+							return true;
+						}}
+					>
+						{videos.map((item: VideoInfoType, index: number) => (
 							<ListItem
+								key={index}
 								className="list-button"
 								secondaryAction={
 									<div style={{ display: 'flex' }}>
 										<ThemeEditButton style={{ zIndex: 99 }} />
-										<ThemeDeleteButton style={{ zIndex: 99 }} />
+										<ThemeDeleteButton style={{ zIndex: 99 }} onClick={() => onDeleteVideos(item.video_id)} />
 									</div>
 								}
 								disablePadding
 							>
-								<ListItemButton className="list-button">{item.video_title}</ListItemButton>
+								<ListItemText className="dragHandle" />
+								<ListItemText className="list-text" disableTypography>
+									{item.video_id} ({item.description})
+								</ListItemText>
 							</ListItem>
 						))}
-					</ul>
+						<ListItem className="list-button add-list" disablePadding>
+							<AddListButton />
+						</ListItem>
+					</ReactSortable>
+				</div>
+				<div className="btn-box">
+					<ThemeButton type="button">초기화</ThemeButton>
+					<ThemeButton type="button">적용</ThemeButton>
 				</div>
 			</div>
 		</div>
 	);
 };
 
-const CountryList = () => {
+const CountryList = (props: { countryCode: string; onSelectCountry: (string) => void }) => {
+	const { countryCode, onSelectCountry } = props;
 	const [region, setRegion] = useState('as');
 	const [countryList, setCountryList] = useState<CountryInfo[]>([]);
 
@@ -172,33 +233,52 @@ const CountryList = () => {
 	const onRegionChange = (e: React.BaseSyntheticEvent, tabValue: string) => {
 		setRegion(tabValue);
 	};
+
 	return (
-		<div className="list-wrapper">
-			<Tabs value={region} onChange={onRegionChange} variant="fullWidth">
-				<Tab className="region-tab" value="as" label="아시아" />
-				<Tab className="region-tab" value="eu" label="유럽" />
-				<Tab className="region-tab" value="na" label="북미" />
-				<Tab className="region-tab" value="sa" label="남미" />
-				<Tab className="region-tab" value="oc" label="오세아니아" />
-			</Tabs>
-			<ul className="list">
-				{countryList.map((country: CountryInfo) => (
-					<ListItem
-						secondaryAction={
-							<div style={{ display: 'flex' }}>
-								<ThemeEditButton style={{ zIndex: 99 }} />
-								<ThemeDeleteButton style={{ zIndex: 99 }} />
-							</div>
-						}
-						disablePadding
-					>
-						<ThemeListItemButton className="list-button on">
-							<img src={country.icon_url} alt="이미지" />
-							<span>{country.country_name}</span>
-						</ThemeListItemButton>
-					</ListItem>
-				))}
-			</ul>
+		<div className="management-content">
+			<div className="content-header">
+				<h2>나라</h2>
+			</div>
+			<div className="content-body">
+				<div className="list-wrapper">
+					<Tabs value={region} onChange={onRegionChange} variant="fullWidth">
+						<Tab className="region-tab" value="as" label="아시아" />
+						<Tab className="region-tab" value="eu" label="유럽" />
+						<Tab className="region-tab" value="na" label="북미" />
+						<Tab className="region-tab" value="sa" label="남미" />
+						<Tab className="region-tab" value="oc" label="오세아니아" />
+					</Tabs>
+					<ul className="list">
+						{countryList.map((country: CountryInfo, index) => (
+							<ListItem
+								key={`country-${index}`}
+								secondaryAction={
+									<div style={{ display: 'flex' }}>
+										<ThemeEditButton style={{ zIndex: 99 }} />
+										<ThemeDeleteButton style={{ zIndex: 99 }} />
+									</div>
+								}
+								disablePadding
+							>
+								<ThemeListItemButton
+									className={`list-button ${countryCode === country.country_code ? 'on' : ''}`}
+									onClick={() => onSelectCountry(country.country_code)}
+								>
+									<img src={country.icon_url} alt="이미지" />
+									<span>{country.country_name}</span>
+								</ThemeListItemButton>
+							</ListItem>
+						))}
+						<ListItem className="list-button" disablePadding>
+							<AddListButton />
+						</ListItem>
+					</ul>
+				</div>
+				<div className="btn-box">
+					<ThemeButton type="button">초기화</ThemeButton>
+					<ThemeButton type="button">적용</ThemeButton>
+				</div>
+			</div>
 		</div>
 	);
 };

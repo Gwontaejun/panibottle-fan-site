@@ -3,12 +3,42 @@
 	justify-content: space-around;
 	box-sizing: border-box;
 	width: 100%;
-	height: calc(100% - 8rem);
+	height: calc(100% - 4rem);
 	padding: 2rem;
 	& > div {
-		width: 45%;
+		width: 40%;
 		h2 {
 			text-align: center;
+			margin: 0;
+		}
+	}
+
+	.management-content {
+		height: 100%;
+
+		.content-header {
+			height: 5%;
+		}
+		.content-body {
+			height: 95%;
+			border: 1px solid black;
+			border-radius: 3%;
+			overflow: hidden;
+			display: flex;
+			flex-direction: column;
+
+			.btn-box {
+				display: flex;
+				justify-content: space-around;
+				height: 10%;
+				margin: 0;
+				button {
+					width: 50%;
+					border: none;
+					font-size: 1.5rem;
+					font-weight: 700;
+				}
+			}
 		}
 	}
 
@@ -18,9 +48,7 @@
 		overflow: hidden;
 		height: 100%;
 		margin: 0;
-		border: 1px solid black;
 		width: 100%;
-		border-radius: 3%;
 
 		.region-tab {
 			font-family: 'defaultFont';
@@ -31,18 +59,41 @@
 		.list {
 			padding: 0;
 			margin: 0;
+
+			&.video-list {
+				li {
+					height: 10%;
+				}
+			}
+
 			li {
 				display: flex;
 				justify-content: flex-start;
 				height: 12%;
 				border-bottom: 1px solid lightgrey;
 
+				.dragHandle {
+					width: 24px;
+					height: 24px;
+					background: url('../images/light_three_line.svg') no-repeat center;
+					flex-grow: 0.1;
+					cursor: grab;
+				}
+
 				.list-button {
 					height: 100%;
 				}
 
+				.list-text {
+					font-size: 1.3rem;
+					font-weight: 700;
+					flex-grow: 1;
+				}
+
 				img {
 					margin: auto 0 auto 2rem;
+					width: 50px;
+					height: 50px;
 				}
 
 				// button {

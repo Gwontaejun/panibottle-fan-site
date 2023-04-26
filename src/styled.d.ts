@@ -19,5 +19,6 @@ declare module 'styled-components' {
 		checkIcon: string;
 		editIcon: string;
 		deleteIcon: string;
+		addIcon: string;
 	}
 }
