@@ -2,10 +2,11 @@ import 'styled-components';
 
 declare module 'styled-components' {
 	export interface DefaultTheme {
+		commonBgColor: string;
+		commonColor: string;
 		scrollThumbColor: string;
-		bgColor: string;
+		mainBgColor: string;
 		headerBgColor: string;
-		headerHoverBgColor: string;
 		navItemBgColor: string;
 		navItemHoverBgColor: string;
 		navItemColor: string;
@@ -20,5 +21,6 @@ declare module 'styled-components' {
 		editIcon: string;
 		deleteIcon: string;
 		addIcon: string;
+		threeLineIcon: string;
 	}
 }

@@ -16,7 +16,6 @@ const HeaderWrapper = styled.header`
 	background: ${(props) => props.theme.headerBgColor};
 	transition: background 1s;
 	&:hover {
-		background: ${(props) => props.theme.headerHoverBgColor};
 		.mode {
 			background-color: white;
 		}

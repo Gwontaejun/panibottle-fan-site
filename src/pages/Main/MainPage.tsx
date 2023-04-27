@@ -26,7 +26,7 @@ const MainWrapper = styled.div`
 const MainContent = styled.div`
 	width: 100%;
 	height: 100%;
-	background-color: ${(props) => props.theme.bgColor};
+	background-color: ${(props) => props.theme.mainBgColor};
 	transition: background-color 1s;
 `;
 

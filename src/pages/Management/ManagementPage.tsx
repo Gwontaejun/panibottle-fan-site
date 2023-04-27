@@ -25,6 +25,19 @@ interface SortableList extends VideoInfoType {
 	name: string | undefined;
 }
 
+const ThemeTabs = styled(Tabs)`
+	.MuiTab-root {
+		color: ${(props) => props.theme.commonColor} !important;
+		font-family: 'defaultFont';
+		font-size: 1rem;
+		font-weight: 700;
+	}
+
+	.MuiTabs-indicator {
+		background-color: ${(props) => props.theme.commonColor};
+	}
+`;
+
 const ThemeListItemButton = styled(ListItemButton)`
 	&.on {
 		&:before {
@@ -36,6 +49,14 @@ const ThemeListItemButton = styled(ListItemButton)`
 			background: url(${(props) => props.theme.checkIcon});
 		}
 	}
+`;
+
+const ThemeThreeLine = styled(ListItemText)`
+	width: 24px;
+	height: 24px;
+	background: url(${(props) => props.theme.threeLineIcon}) no-repeat center;
+	flex-grow: 0.1 !important;
+	cursor: grab;
 `;
 
 const IconButton = styled(ListItemButton)`
@@ -97,6 +118,89 @@ const ManagementPage = () => {
 		<div className="management-wrapper">
 			<CountryList countryCode={countryCode} onSelectCountry={(code: string) => setCountryCode(code)} />
 			<VideoList countryCode={countryCode} />
+		</div>
+	);
+};
+
+const CountryList = (props: { countryCode: string; onSelectCountry: (string) => void }) => {
+	const { countryCode, onSelectCountry } = props;
+	const [region, setRegion] = useState('as');
+	const [countryList, setCountryList] = useState<CountryInfo[]>([]);
+
+	useEffect(() => {
+		loadData();
+	}, [region]);
+
+	const loadData = async () => {
+		const countryObject = await getDocs(query(countryCollection, where('region', '==', region)));
+
+		const result: CountryInfo[] = countryObject.docs.map((item): CountryInfo => {
+			const data = item.data();
+
+			return {
+				doc_id: item.id,
+				icon_url: data.icon_url,
+				country_name: data.country_name,
+				country_code: data.country_code,
+				lat: data.latitude,
+				lng: data.longitude,
+			};
+		});
+		setCountryList(result);
+		onSelectCountry(result[0]?.country_code);
+	};
+
+	const onRegionChange = (e: React.BaseSyntheticEvent, tabValue: string) => {
+		setRegion(tabValue);
+	};
+
+	return (
+		<div className="management-content">
+			<div className="content-header">
+				<h2>나라</h2>
+			</div>
+			<div className="content-body">
+				<div className="list-wrapper">
+					<ThemeTabs value={region} onChange={onRegionChange} variant="fullWidth">
+						<Tab className="region-tab" value="as" label="아시아" />
+						<Tab className="region-tab" value="eu" label="유럽" />
+						<Tab className="region-tab" value="na" label="북미" />
+						<Tab className="region-tab" value="sa" label="남미" />
+						<Tab className="region-tab" value="oc" label="오세아니아" />
+					</ThemeTabs>
+					<ul className="list">
+						{countryList.map((country: CountryInfo, index) => (
+							<ListItem
+								key={`country-${index}`}
+								secondaryAction={
+									<div style={{ display: 'flex' }}>
+										<ThemeEditButton style={{ zIndex: 99 }} />
+										<ThemeDeleteButton style={{ zIndex: 99 }} />
+									</div>
+								}
+								disablePadding
+							>
+								<ThemeListItemButton
+									className={`list-button ${countryCode === country.country_code ? 'on' : ''}`}
+									onClick={() => onSelectCountry(country.country_code)}
+								>
+									<img src={country.icon_url} alt="이미지" />
+									<span>{country.country_name}</span>
+								</ThemeListItemButton>
+							</ListItem>
+						))}
+						<ListItem className="list-button" disablePadding>
+							<AddListButton />
+						</ListItem>
+					</ul>
+				</div>
+				<div className="btn-box">
+					<ThemeButton type="button" className="outline">
+						초기화
+					</ThemeButton>
+					<ThemeButton type="button">적용</ThemeButton>
+				</div>
+			</div>
 		</div>
 	);
 };
@@ -183,7 +287,7 @@ const VideoList = (props: { countryCode: string }) => {
 								}
 								disablePadding
 							>
-								<ListItemText className="dragHandle" />
+								<ThemeThreeLine />
 								<ListItemText className="list-text" disableTypography>
 									{item.video_id} ({item.description})
 								</ListItemText>
@@ -195,87 +299,9 @@ const VideoList = (props: { countryCode: string }) => {
 					</ReactSortable>
 				</div>
 				<div className="btn-box">
-					<ThemeButton type="button">초기화</ThemeButton>
-					<ThemeButton type="button">적용</ThemeButton>
-				</div>
-			</div>
-		</div>
-	);
-};
-
-const CountryList = (props: { countryCode: string; onSelectCountry: (string) => void }) => {
-	const { countryCode, onSelectCountry } = props;
-	const [region, setRegion] = useState('as');
-	const [countryList, setCountryList] = useState<CountryInfo[]>([]);
-
-	useEffect(() => {
-		loadData();
-	}, [region]);
-
-	const loadData = async () => {
-		const countryObject = await getDocs(query(countryCollection, where('region', '==', region)));
-
-		const result: CountryInfo[] = countryObject.docs.map((item): CountryInfo => {
-			const data = item.data();
-
-			return {
-				doc_id: item.id,
-				icon_url: data.icon_url,
-				country_name: data.country_name,
-				country_code: data.country_code,
-				lat: data.latitude,
-				lng: data.longitude,
-			};
-		});
-		setCountryList(result);
-	};
-
-	const onRegionChange = (e: React.BaseSyntheticEvent, tabValue: string) => {
-		setRegion(tabValue);
-	};
-
-	return (
-		<div className="management-content">
-			<div className="content-header">
-				<h2>나라</h2>
-			</div>
-			<div className="content-body">
-				<div className="list-wrapper">
-					<Tabs value={region} onChange={onRegionChange} variant="fullWidth">
-						<Tab className="region-tab" value="as" label="아시아" />
-						<Tab className="region-tab" value="eu" label="유럽" />
-						<Tab className="region-tab" value="na" label="북미" />
-						<Tab className="region-tab" value="sa" label="남미" />
-						<Tab className="region-tab" value="oc" label="오세아니아" />
-					</Tabs>
-					<ul className="list">
-						{countryList.map((country: CountryInfo, index) => (
-							<ListItem
-								key={`country-${index}`}
-								secondaryAction={
-									<div style={{ display: 'flex' }}>
-										<ThemeEditButton style={{ zIndex: 99 }} />
-										<ThemeDeleteButton style={{ zIndex: 99 }} />
-									</div>
-								}
-								disablePadding
-							>
-								<ThemeListItemButton
-									className={`list-button ${countryCode === country.country_code ? 'on' : ''}`}
-									onClick={() => onSelectCountry(country.country_code)}
-								>
-									<img src={country.icon_url} alt="이미지" />
-									<span>{country.country_name}</span>
-								</ThemeListItemButton>
-							</ListItem>
-						))}
-						<ListItem className="list-button" disablePadding>
-							<AddListButton />
-						</ListItem>
-					</ul>
-				</div>
-				<div className="btn-box">
-					<ThemeButton type="button">초기화</ThemeButton>
+					<ThemeButton type="button" className="outline">
+						초기화
+					</ThemeButton>
 					<ThemeButton type="button">적용</ThemeButton>
 				</div>
 			</div>

@@ -23,6 +23,12 @@ const GlobalStyle = createGlobalStyle`
 	::-webkit-scrollbar-track {
 		background-color: transparent;
 	}
+
+	body {
+		color: ${(props) => props.theme.commonColor};
+		background-color: ${(props) => props.theme.commonBgColor};
+		transition: all 1s;
+	}
 `;
 
 const ContentSection = styled.div`

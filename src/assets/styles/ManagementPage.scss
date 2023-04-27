@@ -35,6 +35,7 @@
 				button {
 					width: 50%;
 					border: none;
+					outline: 1px solid black;
 					font-size: 1.5rem;
 					font-weight: 700;
 				}
@@ -49,12 +50,6 @@
 		height: 100%;
 		margin: 0;
 		width: 100%;
-
-		.region-tab {
-			font-family: 'defaultFont';
-			font-size: 1rem;
-			font-weight: 700;
-		}
 
 		.list {
 			padding: 0;
@@ -71,14 +66,6 @@
 				justify-content: flex-start;
 				height: 12%;
 				border-bottom: 1px solid lightgrey;
-
-				.dragHandle {
-					width: 24px;
-					height: 24px;
-					background: url('../images/light_three_line.svg') no-repeat center;
-					flex-grow: 0.1;
-					cursor: grab;
-				}
 
 				.list-button {
 					height: 100%;
