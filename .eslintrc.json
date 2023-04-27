@@ -39,6 +39,7 @@
 		"import/order": 0,
 		"react/require-default-props": "off",
 		"react/no-unused-prop-types": "off",
-		"react-hooks/exhaustive-deps": "off"
+		"react-hooks/exhaustive-deps": "off",
+		"react/no-unknown-property": ["error", { "ignore": ["css"] }]
 	}
 }

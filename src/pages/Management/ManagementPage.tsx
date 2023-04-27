@@ -1,5 +1,8 @@
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable react/prop-types */
+/* eslint-disable @typescript-eslint/no-shadow */
 import React, { useRef, useState, useEffect } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { getDocs, query, where } from 'firebase/firestore';
 import { countryCollection, videoCollection } from 'firebaseStore';
 import ThemeButton from 'components/Button/ThemeButton';
@@ -159,7 +162,12 @@ const CountryList = (props: { countryCode: string; onSelectCountry: (string) => 
 			<div className="content-header">
 				<h2>나라</h2>
 			</div>
-			<div className="content-body">
+			<div
+				className="content-body"
+				css={css`
+					border: 1px solid ${(props) => props.theme.commonColor};
+				`}
+			>
 				<div className="list-wrapper">
 					<ThemeTabs value={region} onChange={onRegionChange} variant="fullWidth">
 						<Tab className="region-tab" value="as" label="아시아" />
@@ -257,7 +265,12 @@ const VideoList = (props: { countryCode: string }) => {
 			<div className="content-header">
 				<h2>나라별 영상</h2>
 			</div>
-			<div className="content-body">
+			<div
+				className="content-body"
+				css={css`
+					border: 1px solid ${(props) => props.theme.commonColor};
+				`}
+			>
 				<div className="list-wrapper">
 					<ReactSortable
 						tag="ul"

@@ -1,4 +1,4 @@
-import 'styled-components';
+import { CSSObject, CSSProp } from 'styled-components';
 
 declare module 'styled-components' {
 	export interface DefaultTheme {
@@ -22,5 +22,11 @@ declare module 'styled-components' {
 		deleteIcon: string;
 		addIcon: string;
 		threeLineIcon: string;
+	}
+}
+
+declare module 'react' {
+	interface Attributes {
+		css?: CSSProp | CSSObject;
 	}
 }
