@@ -3,8 +3,9 @@ import { Button } from '@mui/material';
 
 const ThemeButton = styled(Button)`
 	cursor: pointer;
-	background-color: ${(props) => props.theme.popupButtonBgColor} !important;
-	color: ${(props) => props.theme.popupButtonColor} !important;
+	background-color: ${(props) => props.theme.buttonBgColor} !important;
+	color: ${(props) => props.theme.buttonColor} !important;
+	outline-color: ${(props) => props.theme.commonColor} !important;
 
 	&:hover,
 	&:focus {
@@ -12,13 +13,8 @@ const ThemeButton = styled(Button)`
 	}
 
 	&.outline {
-		background-color: ${(props) => props.theme.popupButtonColor} !important;
-		color: ${(props) => props.theme.popupButtonBgColor} !important;
-
-		&:hover,
-		&:focus {
-			background-color: rgba(0, 0, 0, 0.04);
-		}
+		background-color: transparent !important;
+		color: ${(props) => props.theme.commonColor} !important;
 	}
 `;
 

@@ -1,24 +1,24 @@
 export const lightTheme = {
 	// common
 	commonColor: '#000',
-	commonBgColor: '#fff',
+	commonBgColor: '#FFF',
 	headerBgColor: '#FFF',
 	scrollThumbColor: '#616161',
+	buttonColor: '#FFF',
+	buttonBgColor: '#000',
 
 	// mainPage
 	mainBgColor: '#ff6600',
 
 	// header
 	navItemBgColor: '#FFF',
-	navItemHoverBgColor: '#282c35',
+	navItemHoverBgColor: '#2B2B2B',
 	navItemColor: '#000',
 	navItemHoverColor: '#FFF',
 
 	// popup
 	popupBgColor: '#FFF',
 	popupColor: '#000',
-	popupButtonBgColor: '#000',
-	popupButtonColor: '#FFF',
 
 	// components
 	skeletonColor: 'lightgrey',
@@ -35,24 +35,24 @@ export const lightTheme = {
 export const darkTheme = {
 	// common
 	commonColor: '#D7D7D7',
-	commonBgColor: '#282c35',
+	commonBgColor: '#2B2B2B',
 	headerBgColor: 'transparent',
 	scrollThumbColor: 'lightgrey',
+	buttonColor: '#D7D7D7',
+	buttonBgColor: '#515151',
 
 	// mainPage
-	mainBgColor: '#282c35',
+	mainBgColor: '#2B2B2B',
 
 	// header
-	navItemBgColor: '#282c35',
+	navItemBgColor: '#2B2B2B',
 	navItemHoverBgColor: '#D7D7D7',
 	navItemColor: '#D7D7D7',
 	navItemHoverColor: '#000',
 
 	// popup
-	popupBgColor: '#282c35',
+	popupBgColor: '#2B2B2B',
 	popupColor: '#D7D7D7',
-	popupButtonBgColor: '#5B5F67',
-	popupButtonColor: '#D7D7D7',
 
 	// components
 	skeletonColor: '#616161',

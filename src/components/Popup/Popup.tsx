@@ -21,13 +21,6 @@ const PopupWrapper = styled.div`
 
 	.popup-container {
 		background-color: ${(props) => props.theme.popupBgColor};
-
-		.popup-bottom {
-			button {
-				color: ${(props) => props.theme.popupButtonColor}
-				background-color: ${(props) => props.theme.popupButtonBgColor}
-			}
-		}
 	}
 `;
 

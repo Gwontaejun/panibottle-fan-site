@@ -32,11 +32,11 @@ const CommentSkeleton = styled.div`
 	background-size: 100px 100px, 300px 100px, 300px 100px;
 `;
 
-const PopupButton = styled(ThemeButton)`
-	cursor: pointer;
-	background-color: ${(props) => props.theme.popupButtonBgColor};
-	color: ${(props) => props.theme.popupButtonColor};
-`;
+// const PopupButton = styled(ThemeButton)`
+// 	cursor: pointer;
+// 	background-color: ${(props) => props.theme.popupButtonBgColor};
+// 	color: ${(props) => props.theme.popupButtonColor};
+// `;
 
 interface CountType {
 	viewCount: number;
@@ -198,9 +198,9 @@ const CountryPopup = ({ popupHooks }: { popupHooks: PopupHooks }) => {
 					</div>
 				</div>
 				<div className="popup-bottom">
-					<PopupButton type="button" onClick={() => popupHooks.toggle()}>
+					<ThemeButton type="button" onClick={() => popupHooks.toggle()}>
 						닫기
-					</PopupButton>
+					</ThemeButton>
 				</div>
 			</div>
 		</Popup>

@@ -4,19 +4,24 @@ declare module 'styled-components' {
 	export interface DefaultTheme {
 		commonBgColor: string;
 		commonColor: string;
-		scrollThumbColor: string;
-		mainBgColor: string;
 		headerBgColor: string;
+		scrollThumbColor: string;
+		buttonColor: string;
+		buttonBgColor: string;
+
+		mainBgColor: string;
+
 		navItemBgColor: string;
 		navItemHoverBgColor: string;
 		navItemColor: string;
 		navItemHoverColor: string;
+
 		popupBgColor: string;
 		popupColor: string;
-		popupButtonBgColor: string;
-		popupButtonColor: string;
+
 		skeletonColor: string;
 		carouselArrowColor: string;
+
 		checkIcon: string;
 		editIcon: string;
 		deleteIcon: string;

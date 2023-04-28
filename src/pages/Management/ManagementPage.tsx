@@ -3,17 +3,18 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 import React, { useRef, useState, useEffect } from 'react';
 import styled, { css } from 'styled-components';
-import { getDocs, query, where } from 'firebase/firestore';
-import { countryCollection, videoCollection } from 'firebaseStore';
+import { ReactSortable } from 'react-sortablejs';
+import { doc, getDocs, query, where, writeBatch } from 'firebase/firestore';
+import firestore, { countryCollection, videoCollection } from 'firebaseStore';
 import ThemeButton from 'components/Button/ThemeButton';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
-import { CountryInfo } from 'types/CountryType';
-import { ReactSortable } from 'react-sortablejs';
 import 'assets/styles/ManagementPage.scss';
+
+import { CountryInfo } from 'types/CountryType';
 
 interface VideoInfoType {
 	doc_id?: string | undefined;
@@ -97,24 +98,6 @@ const ManagementPage = () => {
 
 	// const onVideoPush = () => {
 	// 	setVideos([...videos, { index: videos.length, country_code: countryCode, video_id: '' }]);
-	// };
-
-	// const onAddVideo = async () => {
-	// 	const batch = writeBatch(firestore);
-
-	// 	videos.forEach((item) => {
-	// 		if (item.doc_id) {
-	// 			batch.update(doc(videoCollection, item.doc_id), {
-	// 				index: item.index,
-	// 				country_code: countryCode,
-	// 				video_id: item.video_id,
-	// 			});
-	// 		} else {
-	// 			batch.set(doc(videoCollection), { index: item.index, country_code: countryCode, video_id: item.video_id });
-	// 		}
-	// 	});
-
-	// 	await batch.commit();
 	// };
 
 	return (
@@ -260,6 +243,30 @@ const VideoList = (props: { countryCode: string }) => {
 		setVideos(deleteOrderList);
 	};
 
+	const onApply = async () => {
+		const batch = writeBatch(firestore);
+
+		videos.forEach((item) => {
+			if (item.doc_id) {
+				batch.update(doc(videoCollection, item.doc_id), {
+					index: item.index,
+					country_code: countryCode,
+					video_id: item.video_id,
+				});
+			} else {
+				batch.set(doc(videoCollection), { index: item.index, country_code: countryCode, video_id: item.video_id });
+			}
+		});
+
+		if (deleteList.current.length) {
+			deleteList.current.forEach((id) => {
+				batch.delete(doc(videoCollection, id));
+			});
+		}
+
+		await batch.commit();
+	};
+
 	return (
 		<div className="management-content">
 			<div className="content-header">
@@ -300,7 +307,7 @@ const VideoList = (props: { countryCode: string }) => {
 								}
 								disablePadding
 							>
-								<ThemeThreeLine />
+								<ThemeThreeLine className="dragHandle" />
 								<ListItemText className="list-text" disableTypography>
 									{item.video_id} ({item.description})
 								</ListItemText>
@@ -315,7 +322,9 @@ const VideoList = (props: { countryCode: string }) => {
 					<ThemeButton type="button" className="outline">
 						초기화
 					</ThemeButton>
-					<ThemeButton type="button">적용</ThemeButton>
+					<ThemeButton type="button" onClick={onApply}>
+						적용
+					</ThemeButton>
 				</div>
 			</div>
 		</div>
