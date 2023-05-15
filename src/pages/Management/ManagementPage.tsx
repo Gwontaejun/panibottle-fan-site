@@ -84,21 +84,7 @@ const AddListButton = styled(IconButton)`
 `;
 
 const ManagementPage = () => {
-	const [countryCode, setCountryCode] = useState<string>('kr');
-
-	// const onChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-	// 	setCountryInfo({ ...countryInfo, [e.target.id]: e.target.value });
-	// };
-
-	// const onVideoInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-	// 	const cloneVideo = [...videos];
-	// 	cloneVideo[Number(e.target.id)] = { ...cloneVideo[Number(e.target.id)], video_id: e.target.value };
-	// 	setVideos(cloneVideo);
-	// };
-
-	// const onVideoPush = () => {
-	// 	setVideos([...videos, { index: videos.length, country_code: countryCode, video_id: '' }]);
-	// };
+	const [countryCode, setCountryCode] = useState<string | undefined>(undefined);
 
 	return (
 		<div className="management-wrapper">
@@ -108,9 +94,9 @@ const ManagementPage = () => {
 	);
 };
 
-const CountryList = (props: { countryCode: string; onSelectCountry: (string) => void }) => {
+const CountryList = (props: { countryCode: string | undefined; onSelectCountry: (string) => void }) => {
 	const { countryCode, onSelectCountry } = props;
-	const [region, setRegion] = useState('as');
+	const [region, setRegion] = useState<string>('as');
 	const [countryList, setCountryList] = useState<CountryInfo[]>([]);
 
 	useEffect(() => {
@@ -133,7 +119,6 @@ const CountryList = (props: { countryCode: string; onSelectCountry: (string) => 
 			};
 		});
 		setCountryList(result);
-		onSelectCountry(result[0]?.country_code);
 	};
 
 	const onRegionChange = (e: React.BaseSyntheticEvent, tabValue: string) => {
@@ -196,7 +181,7 @@ const CountryList = (props: { countryCode: string; onSelectCountry: (string) => 
 	);
 };
 
-const VideoList = (props: { countryCode: string }) => {
+const VideoList = (props: { countryCode: string | undefined }) => {
 	const { countryCode } = props;
 	const deleteList = useRef<string[]>([]);
 	const [videos, setVideos] = useState<VideoInfoType[]>([]);
@@ -279,50 +264,48 @@ const VideoList = (props: { countryCode: string }) => {
 				`}
 			>
 				<div className="list-wrapper">
-					<ReactSortable
-						tag="ul"
-						className="list video-list"
-						list={videos.map((item): SortableList => ({ ...item, id: item.index, name: item.doc_id }))}
-						setList={onChangeOrder}
-						animation={300}
-						handle=".dragHandle"
-						ghostClass=".list-button"
-						onMove={(e) => {
-							if (e.related.classList.contains('add-list')) {
-								return false;
-							}
-
-							return true;
-						}}
-					>
-						{videos.map((item: VideoInfoType, index: number) => (
-							<ListItem
-								key={index}
-								className="list-button"
-								secondaryAction={
-									<div style={{ display: 'flex' }}>
-										<ThemeEditButton style={{ zIndex: 99 }} />
-										<ThemeDeleteButton style={{ zIndex: 99 }} onClick={() => onDeleteVideos(item.video_id)} />
-									</div>
-								}
-								disablePadding
-							>
-								<ThemeThreeLine className="dragHandle" />
-								<ListItemText className="list-text" disableTypography>
-									{item.video_id} ({item.description})
-								</ListItemText>
+					{countryCode ? (
+						<ReactSortable
+							tag="ul"
+							className="list video-list"
+							list={videos.map((item): SortableList => ({ ...item, id: item.index, name: item.doc_id }))}
+							setList={onChangeOrder}
+							animation={300}
+							handle=".dragHandle"
+							ghostClass=".list-button"
+							onMove={(e) => !e.related.classList.contains('add-list')}
+						>
+							{videos.map((item: VideoInfoType, index: number) => (
+								<ListItem
+									key={index}
+									className="list-button"
+									secondaryAction={
+										<div style={{ display: 'flex' }}>
+											<ThemeEditButton style={{ zIndex: 99 }} />
+											<ThemeDeleteButton style={{ zIndex: 99 }} onClick={() => onDeleteVideos(item.video_id)} />
+										</div>
+									}
+									disablePadding
+								>
+									<ThemeThreeLine className="dragHandle" />
+									<ListItemText className="list-text" disableTypography>
+										{item.video_id} ({item.description})
+									</ListItemText>
+								</ListItem>
+							))}
+							<ListItem className="list-button add-list" disablePadding>
+								<AddListButton />
 							</ListItem>
-						))}
-						<ListItem className="list-button add-list" disablePadding>
-							<AddListButton />
-						</ListItem>
-					</ReactSortable>
+						</ReactSortable>
+					) : (
+						<div className="list video-list empty">나라를 선택해주세요.</div>
+					)}
 				</div>
 				<div className="btn-box">
-					<ThemeButton type="button" className="outline">
+					<ThemeButton type="button" className="outline" disabled={!countryCode}>
 						초기화
 					</ThemeButton>
-					<ThemeButton type="button" onClick={onApply}>
+					<ThemeButton type="button" onClick={onApply} disabled={!countryCode}>
 						적용
 					</ThemeButton>
 				</div>
