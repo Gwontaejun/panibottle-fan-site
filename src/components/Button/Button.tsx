@@ -15,6 +15,7 @@ const ThemeButton = styled(Button)`
 	&.outline {
 		background-color: transparent !important;
 		color: ${(props) => props.theme.commonColor} !important;
+		outline: 1px solid;
 	}
 `;
 

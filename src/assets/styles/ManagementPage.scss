@@ -5,7 +5,7 @@
 	width: 100%;
 	height: calc(100% - 4rem);
 	padding: 2rem;
-	& > div {
+	& > .management-content {
 		width: 40%;
 		h2 {
 			text-align: center;
@@ -92,12 +92,6 @@
 					width: 50px;
 					height: 50px;
 				}
-
-				// button {
-				// 	&:hover {
-				// 		background-color: rgba(0, 0, 0, 0.04);
-				// 	}
-				// }
 			}
 		}
 	}
@@ -106,5 +100,21 @@
 		list-style: none;
 		overflow-y: auto;
 		height: 100%;
+	}
+}
+
+.country-info-popup {
+	.popup-container {
+		height: 60%;
+
+		.popup-header {
+			img {
+				position: absolute;
+				top: -8%;
+				left: 3rem;
+				width: 10%;
+				border-radius: 50%;
+			}
+		}
 	}
 }

@@ -31,7 +31,7 @@ const Popup = (props: PopupTypes) => {
 		<FocusTrap active={popupHooks.isShowing}>
 			<PopupWrapper className={`popup-wrapper ${className} ${popupHooks.isShowing ? 'show' : ''}`}>
 				<div className="popup-dim" />
-				{props?.children}
+				<div className="popup-container">{props?.children}</div>
 			</PopupWrapper>
 		</FocusTrap>
 	);

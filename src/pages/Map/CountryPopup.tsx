@@ -1,13 +1,19 @@
 import React, { useRef, useState, useEffect } from 'react';
-import axios from 'axios';
-import Youtube from 'react-youtube';
-import styled from 'styled-components';
+
+// state, service
 import { useRecoilValue, useResetRecoilState } from 'recoil';
 import { countryInfo, countryVideo } from 'store/mapStore';
+import { getCommentList, getVideoInfo } from 'service';
+
+// component or style
 import { Popup } from 'components';
 import { PopupHooks } from 'components/Popup/Popup';
 import Carousel from 'components/Carousel/Carousel';
-import ThemeButton from 'components/Button/ThemeButton';
+import Button from 'components/Button/Button';
+import styled from 'styled-components';
+
+// other library (util or component)
+import Youtube from 'react-youtube';
 import numeral from 'numeral';
 
 const CommentIcon = styled.img`
@@ -31,12 +37,6 @@ const CommentSkeleton = styled.div`
 
 	background-size: 100px 100px, 300px 100px, 300px 100px;
 `;
-
-// const PopupButton = styled(ThemeButton)`
-// 	cursor: pointer;
-// 	background-color: ${(props) => props.theme.popupButtonBgColor};
-// 	color: ${(props) => props.theme.popupButtonColor};
-// `;
 
 interface CountType {
 	viewCount: number;
@@ -78,43 +78,23 @@ const CountryPopup = ({ popupHooks }: { popupHooks: PopupHooks }) => {
 	};
 
 	const loadData = async () => {
-		const idQueryParams = videos.map((item) => `id=${item}`).join('&');
-		let viewCount = 0;
-		let likeCount = 0;
-		const commentResults: CommentType[] = [];
+		// 영상 정보 (조회수, 좋아요수)
+		getVideoInfo(videos).then((r) => {
+			let viewCount = 0;
+			let likeCount = 0;
 
-		try {
-			// 영상 정보 (조회수, 좋아요수)
-			const videoInfo = await axios({
-				url: `https://www.googleapis.com/youtube/v3/videos?${idQueryParams}`,
-				method: 'get',
-				params: {
-					key: process.env.REACT_APP_GOOGLE_API_KEY,
-					part: 'statistics',
-				},
-			});
-			videoInfo.data.items.forEach((item) => {
+			r.data.items.forEach((item) => {
 				viewCount += Number(item.statistics.viewCount);
 				likeCount += Number(item.statistics.likeCount);
 			});
 
-			// 댓글 모음 API 요청
-			const commentObj = await axios.all(
-				videos.map((item) =>
-					axios({
-						url: 'https://www.googleapis.com/youtube/v3/commentThreads',
-						method: 'get',
-						params: {
-							key: process.env.REACT_APP_GOOGLE_API_KEY,
-							part: 'snippet',
-							videoId: item,
-							maxResults: 20,
-						},
-					})
-				)
-			);
+			setCount({ viewCount, likeCount });
+		});
 
-			commentObj.forEach((res) => {
+		// 댓글 모음 API 요청
+		getCommentList(videos).then((r) => {
+			const commentResults: CommentType[] = [];
+			r.forEach((res) => {
 				const comment = res.data.items.map(
 					(item): CommentType => ({
 						name: item.snippet.topLevelComment.snippet.authorDisplayName,
@@ -124,13 +104,8 @@ const CountryPopup = ({ popupHooks }: { popupHooks: PopupHooks }) => {
 				);
 				commentResults.push(...comment);
 			});
-
 			setCommentList(commentResults);
-		} catch (e) {
-			console.log('API 요청 에러', e);
-		}
-
-		setCount({ viewCount, likeCount });
+		});
 	};
 
 	const renderComment = () =>
@@ -152,19 +127,19 @@ const CountryPopup = ({ popupHooks }: { popupHooks: PopupHooks }) => {
 		);
 
 	return (
-		<Popup popupHooks={popupHooks}>
-			<div className="popup-container">
-				<div className="popup-header">
-					<img src={info.icon_url} alt="국기 아이콘" />
-					<h1>{info.country_name}</h1>
-					<span className="country-region">Asia</span>
-					<span className="country-count">
-						총합 조회 수 : {numeral(count?.viewCount).format('0,0')} | 좋아요 수 :{' '}
-						{numeral(count?.likeCount).format('0,0')}
-					</span>
-				</div>
-				<div className="popup-content">
-					<div className="country-content">
+		<Popup popupHooks={popupHooks} className="country-popup">
+			<div className="popup-header">
+				<img src={info.icon_url} alt="국기 아이콘" />
+				<h1>{info.country_name}</h1>
+				<span className="country-region">{info.region}</span>
+				<span className="country-count">
+					총합 조회 수 : {numeral(count?.viewCount).format('0,0')} | 좋아요 수 :{' '}
+					{numeral(count?.likeCount).format('0,0')}
+				</span>
+			</div>
+			<div className="popup-content">
+				<div className="country-content">
+					{videos.length && (
 						<Carousel isReady={isReady}>
 							{videos.map((item) => (
 								<Youtube
@@ -182,26 +157,18 @@ const CountryPopup = ({ popupHooks }: { popupHooks: PopupHooks }) => {
 								/>
 							))}
 						</Carousel>
-						<div className="country-comments">
-							<h3>댓글 모음</h3>
-							<hr />
-							<ul>{popupHooks.isShowing && renderComment()}</ul>
-							{/* <ul>
-								<ul>
-									<li>
-										<CommentIcon src={undefined} className="skeleton" />
-										<CommentSkeleton />
-									</li>
-								</ul>
-							</ul> */}
-						</div>
+					)}
+					<div className="country-comments">
+						<h3>댓글 모음</h3>
+						<hr />
+						<ul>{popupHooks.isShowing && renderComment()}</ul>
 					</div>
 				</div>
-				<div className="popup-bottom">
-					<ThemeButton type="button" onClick={() => popupHooks.toggle()}>
-						닫기
-					</ThemeButton>
-				</div>
+			</div>
+			<div className="popup-bottom">
+				<Button type="button" onClick={() => popupHooks.toggle()}>
+					닫기
+				</Button>
 			</div>
 		</Popup>
 	);
