@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import Popup, { PopupHooks } from 'components/Popup/Popup';
 import Button from 'components/Button/Button';
 
@@ -10,11 +10,22 @@ interface CountryPopupProps {
 
 const CountryInfoPopup = (props: CountryPopupProps) => {
 	const { popupHooks } = props;
+	const fileRef = useRef<HTMLInputElement>(null);
+
+	const onCountryImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+		console.log('e', e);
+	};
 
 	return (
 		<Popup popupHooks={popupHooks} className="country-info-popup">
 			<div className="popup-header">
-				<img src={defaultIcon} alt="국기 아이콘" />
+				<input type="file" ref={fileRef} accept="image/jpeg, image/png" onChange={onCountryImage} />
+				<span role="presentation" className="select-image" onClick={() => fileRef.current?.click()}>
+					이미지를
+					<br />
+					선택해주세요.
+				</span>
+				<img className="country-image" src={defaultIcon} alt="국기 아이콘" />
 			</div>
 			<div className="popup-content" />
 			<div className="popup-bottom">
