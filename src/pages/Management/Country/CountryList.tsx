@@ -129,7 +129,7 @@ const CountryList = (props: { countryCode: string | undefined; onSelectCountry: 
 					</div>
 				</div>
 			</div>
-			<CountryInfoPopup popupHooks={countryInfoPopup} />
+			{countryInfoPopup.isShowing && <CountryInfoPopup popupHooks={countryInfoPopup} />}
 		</>
 	);
 };

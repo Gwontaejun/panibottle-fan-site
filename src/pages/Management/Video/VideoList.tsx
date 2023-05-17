@@ -45,7 +45,9 @@ const VideoList = (props: { countryCode: string | undefined }) => {
 	const [videos, setVideos] = useState<VideoInfoType[]>([]);
 
 	useEffect(() => {
-		loadData();
+		if (countryCode) {
+			loadData();
+		}
 	}, [countryCode]);
 
 	const loadData = async () => {
