@@ -50,15 +50,18 @@ const CountrySearch = (props: CountrySearchPropsType) => {
 
 	return (
 		<Autocomplete
+			disablePortal
 			autoHighlight
+			blurOnSelect
 			options={autoCompleteList}
-			sx={{ width: 300 }}
 			onChange={onSelect}
 			renderInput={(params) => (
 				<TextField
 					{...params}
+					fullWidth
+					placeholder="국가를 검색해주세요."
 					onChange={(evt) => {
-						getPlacePredictions({ input: evt.target.value });
+						getPlacePredictions({ input: evt.target.value, region: 'as' });
 					}}
 				/>
 			)}

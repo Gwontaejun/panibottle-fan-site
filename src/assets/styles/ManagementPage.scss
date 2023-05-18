@@ -105,10 +105,11 @@
 
 .country-info-popup {
 	.popup-container {
-		height: 60%;
+		width: 50rem;
+		height: 32rem;
 
 		.popup-header {
-			height: 15%;
+			height: 5rem;
 
 			.country-image {
 				position: absolute;
@@ -141,6 +142,10 @@
 					opacity: 0.7;
 				}
 			}
+		}
+
+		.popup-content {
+			height: 21rem;
 		}
 	}
 }

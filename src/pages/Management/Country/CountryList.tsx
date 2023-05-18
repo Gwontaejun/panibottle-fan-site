@@ -4,7 +4,7 @@
 import React, { useState, useEffect } from 'react';
 
 // state, service
-import { getDocs, query, where } from 'firebase/firestore';
+import { getDocs } from 'firebase/firestore';
 import { countryCollection } from 'firebaseStore';
 
 // component or style
@@ -14,27 +14,11 @@ import { usePopup } from 'hooks';
 import CountryInfoPopup from './CountryInfoPopup';
 
 // other library (util or component)
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 
 // type
 import { CountryInfo } from 'types/CountryType';
-
-const ThemeTabs = styled(Tabs)`
-	.MuiTab-root {
-		color: ${(props) => props.theme.commonColor} !important;
-		font-family: 'defaultFont';
-
-		font-size: 1rem;
-		font-weight: 700;
-	}
-
-	.MuiTabs-indicator {
-		background-color: ${(props) => props.theme.commonColor};
-	}
-`;
 
 const ThemeListItemButton = styled(ListItemButton)`
 	&.on {
@@ -52,15 +36,14 @@ const ThemeListItemButton = styled(ListItemButton)`
 const CountryList = (props: { countryCode: string | undefined; onSelectCountry: (string) => void }) => {
 	const { countryCode, onSelectCountry } = props;
 	const countryInfoPopup = usePopup();
-	const [region, setRegion] = useState<string>('as');
 	const [countryList, setCountryList] = useState<CountryInfo[]>([]);
 
 	useEffect(() => {
 		loadData();
-	}, [region]);
+	}, []);
 
 	const loadData = async () => {
-		const countryObject = await getDocs(query(countryCollection, where('region', '==', region)));
+		const countryObject = await getDocs(countryCollection);
 
 		const result: CountryInfo[] = countryObject.docs.map((item): CountryInfo => {
 			const data = item.data();
@@ -77,10 +60,6 @@ const CountryList = (props: { countryCode: string | undefined; onSelectCountry: 
 		setCountryList(result);
 	};
 
-	const onRegionChange = (e: React.BaseSyntheticEvent, tabValue: string) => {
-		setRegion(tabValue);
-	};
-
 	return (
 		<>
 			<div className="management-content">
@@ -94,13 +73,6 @@ const CountryList = (props: { countryCode: string | undefined; onSelectCountry: 
 					`}
 				>
 					<div className="list-wrapper">
-						<ThemeTabs value={region} onChange={onRegionChange} variant="fullWidth">
-							<Tab className="region-tab" value="as" label="아시아" />
-							<Tab className="region-tab" value="eu" label="유럽" />
-							<Tab className="region-tab" value="na" label="북미" />
-							<Tab className="region-tab" value="sa" label="남미" />
-							<Tab className="region-tab" value="oc" label="오세아니아" />
-						</ThemeTabs>
 						<ul className="list">
 							{countryList.map((country: CountryInfo, index) => (
 								<ListItem

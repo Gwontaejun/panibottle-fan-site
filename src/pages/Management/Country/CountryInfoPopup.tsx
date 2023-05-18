@@ -1,9 +1,11 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState } from 'react';
 import Popup, { PopupHooks } from 'components/Popup/Popup';
 import Button from 'components/Button/Button';
 import CountrySearch from 'components/AutoComplete/CountrySearch';
+import TagInput from 'components/TagInput/TagInput';
 
 import { CountryInfo } from 'types/CountryType';
+import { Grid } from '@mui/material';
 
 const defaultIcon = require('assets/images/icon_question.svg').default;
 
@@ -21,6 +23,7 @@ const CountryInfoPopup = (props: CountryPopupProps) => {
 		lat: null,
 		lng: null,
 	});
+	const [tagList, setTagList] = useState<string[]>([]);
 
 	const onCountryImage = (e: React.ChangeEvent) => {
 		const targetFiles = (e.target as HTMLInputElement).files as FileList;
@@ -36,7 +39,7 @@ const CountryInfoPopup = (props: CountryPopupProps) => {
 	};
 
 	const onCountrySelect = (data: CountryInfo) => {
-		console.log('data', data);
+		setInfo(data);
 	};
 
 	return (
@@ -51,7 +54,32 @@ const CountryInfoPopup = (props: CountryPopupProps) => {
 				<img ref={iconRef} className="country-image" src={defaultIcon} alt="국기 아이콘" />
 			</div>
 			<div className="popup-content">
-				<CountrySearch onCountrySelect={onCountrySelect} />
+				<Grid container spacing={2}>
+					<Grid item xs={3}>
+						<h3>국가명</h3>
+					</Grid>
+					<Grid item xs={9}>
+						<CountrySearch onCountrySelect={onCountrySelect} />
+					</Grid>
+					<Grid item xs={3}>
+						<h3>국가코드</h3>
+					</Grid>
+					<Grid item xs={9}>
+						<h4>{info.country_code}</h4>
+					</Grid>
+					<Grid item xs={3}>
+						<h3>위도 / 경도</h3>
+					</Grid>
+					<Grid item xs={9}>
+						<h4>{info.lat ? `${info.lat} / ${info.lng}` : ''}</h4>
+					</Grid>
+					<Grid item xs={3}>
+						<h3>Tag</h3>
+					</Grid>
+					<Grid item xs={9}>
+						<TagInput data={tagList} onTag={setTagList} />
+					</Grid>
+				</Grid>
 			</div>
 			<div className="popup-bottom">
 				<Button type="button" className="outline" onClick={() => popupHooks.toggle()}>
