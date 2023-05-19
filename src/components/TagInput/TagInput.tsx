@@ -8,12 +8,7 @@ interface TagInputPropsType {
 }
 
 const TagTextField = styled(TextField)`
-	color: ${(props) => props.theme.commonColor};
 	margin-bottom: 1rem !important;
-
-	fieldset {
-		border-color: ${(props) => props.theme.commonColor} !important;
-	}
 `;
 
 const TagInput = (props: TagInputPropsType) => {

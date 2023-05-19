@@ -24,6 +24,25 @@ const GlobalStyle = createGlobalStyle`
 		background-color: transparent;
 	}
 
+	input::-webkit-input-placeholder {
+		color: ${(props) => props.theme.commonColor};
+	}
+
+	.MuiInputBase-root {
+		color: ${(props) => props.theme.commonColor} !important;
+		fieldset {
+			border-color: ${(props) => props.theme.commonColor} !important;
+		}
+	}
+
+	.MuiChip-root {
+		color: ${(props) => props.theme.commonColor} !important;
+		border-color: ${(props) => props.theme.commonColor} !important;
+		svg {
+			color: ${(props) => props.theme.commonColor} !important;
+		}
+	}
+
 	body {
 		color: ${(props) => props.theme.commonColor};
 		background-color: ${(props) => props.theme.commonBgColor};
