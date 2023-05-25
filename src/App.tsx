@@ -13,6 +13,8 @@ import MapPage from 'pages/Map/MapPage';
 import ManagementPage from 'pages/Management/ManagementPage';
 import { lightTheme, darkTheme } from 'theme/theme';
 
+import { SnackbarProvider } from 'notistack';
+
 const GlobalStyle = createGlobalStyle`
 	::-webkit-scrollbar {
 		width: 10px;
@@ -68,14 +70,16 @@ const ThemePage = () => {
 	return (
 		<ThemeProvider theme={isDarkMode ? darkTheme : lightTheme}>
 			<GlobalStyle theme={isDarkMode ? darkTheme : lightTheme} />
-			<Header />
-			<ContentSection>
-				<Routes>
-					<Route path="/" element={<MainPage />} />
-					<Route path="/map" element={<MapPage />} />
-					<Route path="/management" element={<ManagementPage />} />
-				</Routes>
-			</ContentSection>
+			<SnackbarProvider maxSnack={5} autoHideDuration={3000}>
+				<Header />
+				<ContentSection>
+					<Routes>
+						<Route path="/" element={<MainPage />} />
+						<Route path="/map" element={<MapPage />} />
+						<Route path="/management" element={<ManagementPage />} />
+					</Routes>
+				</ContentSection>
+			</SnackbarProvider>
 		</ThemeProvider>
 	);
 };

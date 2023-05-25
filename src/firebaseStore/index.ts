@@ -1,5 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore, collection } from 'firebase/firestore';
+import { getStorage } from 'firebase/storage';
 
 const firebaseConfig = {
 	apiKey: process.env.REACT_APP_GOOGLE_API_KEY,
@@ -14,6 +15,7 @@ const firebaseConfig = {
 initializeApp(firebaseConfig);
 const firestore = getFirestore();
 
+export const fireStorage = getStorage();
 export const countryCollection = collection(firestore, 'country');
 export const videoCollection = collection(firestore, 'country_video');
 

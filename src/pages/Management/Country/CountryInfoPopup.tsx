@@ -1,5 +1,10 @@
 import React, { useRef, useState } from 'react';
 
+// state, service
+import { doc, setDoc } from 'firebase/firestore';
+import { countryCollection, fireStorage } from 'firebaseStore';
+import { ref, uploadBytes } from 'firebase/storage';
+
 // component or style
 import Popup, { PopupHooks } from 'components/Popup/Popup';
 import Button from 'components/Button/Button';
@@ -8,6 +13,7 @@ import TagInput from 'components/TagInput/TagInput';
 
 // other library (util or component)
 import { Grid } from '@mui/material';
+import { useSnackbar } from 'notistack';
 
 // type
 import { CountryInfo } from 'types/CountryType';
@@ -22,6 +28,7 @@ interface CountryPopupProps {
 
 const CountryInfoPopup = (props: CountryPopupProps) => {
 	const { popupHooks, countryList, apply } = props;
+	const { enqueueSnackbar } = useSnackbar();
 	const fileRef = useRef<HTMLInputElement>(null);
 	const iconRef = useRef<HTMLImageElement>(null);
 	const [info, setInfo] = useState<CountryInfo>({
@@ -49,11 +56,50 @@ const CountryInfoPopup = (props: CountryPopupProps) => {
 		setInfo(data);
 	};
 
-	const onApply = (): void => {
+	const onApply = async (): Promise<undefined> => {
+		const file = fileRef.current?.files?.[0];
+
+		if (!file) {
+			enqueueSnackbar('아이콘을 등록해주세요.', { variant: 'error' });
+			return;
+		}
+		if (!info.country_code) {
+			enqueueSnackbar('국가를 입력해주세요.', { variant: 'error' });
+			return;
+		}
+
 		const findCountry = countryList.find((item) => item.country_code.toUpperCase() === info.country_code.toUpperCase());
-		console.log('FIND COUNTRY', findCountry);
-		// popupHooks.toggle();
-		apply();
+		if (findCountry) {
+			enqueueSnackbar('등록에 실패했습니다.', { variant: 'error' });
+			return;
+		}
+
+		try {
+			const iconFormat = file.name.slice(file.name.indexOf('.') + 1).toLowerCase();
+			const storageRef = ref(fireStorage, `country/${info.country_code}-icon.${iconFormat}`);
+
+			const { metadata } = await uploadBytes(storageRef, file);
+
+			const imageURL = `https://firebasestorage.googleapis.com/v0/b/${metadata.bucket}/o/${metadata.fullPath.replace(
+				'/',
+				'%2f'
+			)}?alt=media`;
+
+			await setDoc(doc(countryCollection), {
+				country_code: info.country_code,
+				country_name: info.country_name,
+				icon_url: imageURL,
+				latitude: info.lat,
+				longitude: info.lng,
+				tags: tagList,
+			});
+			enqueueSnackbar('등록에 성공했습니다.', { variant: 'success' });
+
+			apply();
+			popupHooks.toggle();
+		} catch (e) {
+			console.log('초비상 에러 발생!!!', e);
+		}
 	};
 
 	return (
