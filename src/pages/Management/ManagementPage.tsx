@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-
 import CountryList from './Country/CountryList';
 import VideoList from './Video/VideoList';
 import 'assets/styles/ManagementPage.scss';

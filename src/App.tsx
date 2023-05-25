@@ -1,7 +1,11 @@
 import React from 'react';
+
+// state, service
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { RecoilRoot, useRecoilValue } from 'recoil';
 import { darkModeState } from 'store/commonStore';
+
+// component or style
 import styled, { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { Header } from 'components';
 import MainPage from 'pages/Main/MainPage';
@@ -36,6 +40,7 @@ const GlobalStyle = createGlobalStyle`
 	}
 
 	.MuiChip-root {
+		margin: 0 0.5rem 0.5rem 0 !important;
 		color: ${(props) => props.theme.commonColor} !important;
 		border-color: ${(props) => props.theme.commonColor} !important;
 		svg {

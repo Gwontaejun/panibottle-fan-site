@@ -79,6 +79,9 @@
 
 				.list-button {
 					height: 100%;
+					span {
+						margin-left: 1rem;
+					}
 				}
 
 				.list-text {
@@ -106,7 +109,7 @@
 .country-info-popup {
 	.popup-container {
 		width: 50rem;
-		height: 32rem;
+		height: 33rem;
 
 		.popup-header {
 			height: 5rem;
@@ -145,7 +148,7 @@
 		}
 
 		.popup-content {
-			height: 21rem;
+			height: 22rem;
 		}
 	}
 }

@@ -101,7 +101,9 @@ const CountryList = (props: { countryCode: string | undefined; onSelectCountry: 
 					</div>
 				</div>
 			</div>
-			{countryInfoPopup.isShowing && <CountryInfoPopup popupHooks={countryInfoPopup} />}
+			{countryInfoPopup.isShowing && (
+				<CountryInfoPopup popupHooks={countryInfoPopup} countryList={countryList} apply={loadData} />
+			)}
 		</>
 	);
 };

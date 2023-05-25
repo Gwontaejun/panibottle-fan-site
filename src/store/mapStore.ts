@@ -18,9 +18,3 @@ export const countryVideo = atom<string[]>({
 	key: 'countryVideo',
 	default: [],
 });
-
-// export const darkModeSelector = selector({
-// 	key: 'darkModeSelector',
-// 	get: ({ get }) => get(darkModeState),
-// 	set: ({ set }, newValue) => set(darkModeState, !newValue),
-// });

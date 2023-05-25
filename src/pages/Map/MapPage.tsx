@@ -1,17 +1,19 @@
 import React, { Suspense, useRef, useState, useEffect } from 'react';
+// state, service
 import { getDocs, orderBy, query, where } from 'firebase/firestore';
 import { countryCollection, videoCollection } from 'firebaseStore';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { darkModeState } from 'store/commonStore';
 import { countryInfo, countryVideo } from 'store/mapStore';
+
+// component or style
 import { Map } from 'components';
 import { usePopup } from 'hooks';
 import CountryPopup from './CountryPopup';
-
-// 맵 Props Interface
-import { MarkerProps } from 'components/Map/Map';
-
 import 'assets/styles/MapPage.scss';
+
+// type
+import { MarkerProps } from 'components/Map/Map';
 
 const MapPage = () => {
 	const countryPopup = usePopup();

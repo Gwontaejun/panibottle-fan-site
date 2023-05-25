@@ -1,9 +1,14 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { useState, useEffect } from 'react';
-import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
+
+// state, service
 import usePlacesService from 'react-google-autocomplete/lib/usePlacesAutocompleteService';
 
+// other library (util or component)
+import TextField from '@mui/material/TextField';
+import Autocomplete from '@mui/material/Autocomplete';
+
+// type
 import { CountryInfo } from 'types/CountryType';
 
 interface AutoCompleteType {

@@ -1,20 +1,27 @@
 import React, { useRef, useState } from 'react';
+
+// component or style
 import Popup, { PopupHooks } from 'components/Popup/Popup';
 import Button from 'components/Button/Button';
 import CountrySearch from 'components/AutoComplete/CountrySearch';
 import TagInput from 'components/TagInput/TagInput';
 
-import { CountryInfo } from 'types/CountryType';
+// other library (util or component)
 import { Grid } from '@mui/material';
+
+// type
+import { CountryInfo } from 'types/CountryType';
 
 const defaultIcon = require('assets/images/icon_question.svg').default;
 
 interface CountryPopupProps {
 	popupHooks: PopupHooks;
+	countryList: CountryInfo[];
+	apply: () => void;
 }
 
 const CountryInfoPopup = (props: CountryPopupProps) => {
-	const { popupHooks } = props;
+	const { popupHooks, countryList, apply } = props;
 	const fileRef = useRef<HTMLInputElement>(null);
 	const iconRef = useRef<HTMLImageElement>(null);
 	const [info, setInfo] = useState<CountryInfo>({
@@ -40,6 +47,13 @@ const CountryInfoPopup = (props: CountryPopupProps) => {
 
 	const onCountrySelect = (data: CountryInfo) => {
 		setInfo(data);
+	};
+
+	const onApply = (): void => {
+		const findCountry = countryList.find((item) => item.country_code.toUpperCase() === info.country_code.toUpperCase());
+		console.log('FIND COUNTRY', findCountry);
+		// popupHooks.toggle();
+		apply();
 	};
 
 	return (
@@ -85,7 +99,7 @@ const CountryInfoPopup = (props: CountryPopupProps) => {
 				<Button type="button" className="outline" onClick={() => popupHooks.toggle()}>
 					취소
 				</Button>
-				<Button type="button" onClick={() => popupHooks.toggle()}>
+				<Button type="button" onClick={onApply}>
 					적용
 				</Button>
 			</div>
