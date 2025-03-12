@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "target": "panibottle-fan-site-f79fb",
+    "target": "panibottle-fan-site",
     "public": "public",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "rewrites": [

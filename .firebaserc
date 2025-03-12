@@ -1,5 +1,15 @@
 {
   "projects": {
-    "default": "panibottle-fan-site-f79fb"
-  }
+    "default": "panibottle-fan-site"
+  },
+  "targets": {
+    "panibottle-fan-site-f79fb": {
+      "hosting": {
+        "panibottle-fan-site": [
+          "public"
+        ]
+      }
+    }
+  },
+  "etags": {}
 }
