@@ -15,6 +15,6 @@ jobs:
 
       - name: Deploy
         run: test ${{ secrets.FIREBASE_TOKEN }}
-        run: npx firebase-tools deploy --only functions:nextServer,hosting
+        # run: npx firebase-tools deploy --only functions:nextServer,hosting
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
